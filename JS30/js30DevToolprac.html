@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+// Regular
+    console.log('hello')
+
+
+// Interpolated
+    console.log('Hello I am a %s string','poop')
+    const vari = "poop";
+    console.log(`Hello i am a ${vari} string`)
+
+
+// Styled
+    
+    console.log('%c I am some great text',
+    'font-size:50px; background: red; text-shadow: 10px 10px 0 blue');
+// warning!
+    console.warn('oh no');
+
+// Error :|
+
+    console.error('shift');
+    
+// Info
+    
+    console.info('crocodiles eat 3-4 people per year');
+
+// Testing
+
+    const p = document.querySelector('p');
+    console.assert(1===1,'that is wrong!')
+        // false일때 만 출력 ex)
+        console.assert(1===2, 'that is wrong!')
+        console.assert(p.classList.contains('ouch'),'that is wrong!');
+        // p에 ouch가 있으면 'that is wrong!'을 출력해야하지만 false라서
+        // 실행 x
+        console.assert(1===1, 'that is right')
+        // 맞아서 콘솔에 실행x
+    
+// clearing
+
+    console.clear();
+    //걍 말그대로 콘솔 청소, 싹다 없앰
+
+// Viewing DOM Elements
+
+    console.log(p);
+    console.dir(p);
+
+    console.clear();
+
+// Grouping together
+
+    dogs.forEach(dog => {
+        console.group(`${dog.name}`);//dog name으로 grouping
+        console.log(`This is ${dog.name}`);
+        console.log(`${dog.name} is ${dog.age} year old`);
+        console.log(`${dog.name} is ${dog.age*7} dog years old`);
+        console.groupEnd(`${dog.name}`);//해당 grouping 종료
+    });
+
+// counting
+
+    console.count('wes')
+    console.count('stive')
+    console.count('wes')
+    console.count('stive')
+    console.count('wes')
+    console.count('stive')
+    console.count('wes')
+    console.count('stive')
+    console.count('stive')
+    console.count('wes')
+    //매개변수를 구분해서 각각 몇개씩 썻는지 옆에다 띄워줌
+
+// timing
+
+    console.time('fetching data');//parameter를 실행할 때까지의 시간
+    fetch('https://www.naver.com/')
+        .then(data =>data.json())
+        .then(data =>{//json실행할때까지의 과정
+            console.timeEnd('fetchig data');// 파라미터가 실행 될때 엔드
+            console.log(data);
+        });
+
+  </script>
+</body>
+</html>
