@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+    const pressed =[];//키가 눌린 걸 모두 배열에 담음
+    const secretCode ='wesbos';//비밀 구문 
+    
+    window.addEventListener('keyup',(e)=>{//key가 올라가면 e함수를 실행
+        console.log(e.key);//e함수의 키를 띄워라
+        pressed.push(e.key);// key들이 눌리면 pressed에 입력
+        pressed.splice(-secretCode.length -1, pressed.length - secretCode.length);
+        if(pressed.join('').includes(secretCode)){
+            // 만약 눌려서 표출된것들 중에 비밀 구문이 나오면
+            console.log('DING DING!');//띵띵! 출력
+            cornify_add();//그와 동시에 유니콘 랜덤그림 출력 짱신기
+        }
+        console.log(pressed);// 입력된 것들을 모두 출력
+    })
+</script>
+</body>
+</html>
