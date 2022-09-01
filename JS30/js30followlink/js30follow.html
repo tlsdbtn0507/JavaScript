@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>👀👀👀Follow Along Nav</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+      <ul class="menu">
+        <li><a href="">Home</a></li>
+        <li><a href="">Order Status</a></li>
+        <li><a href="">Tweets</a></li>
+        <li><a href="">Read Our History</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul>
+    </nav>
+
+    <div class="wrapper">
+      <p>Lorem ipsum dolor sit amet, <a href="">consectetur</a> adipisicing elit. Est <a href="">explicabo</a> unde natus necessitatibus esse obcaecati distinctio, aut itaque, qui vitae!</p>
+      <p>Aspernatur sapiente quae sint <a href="">soluta</a> modi, atque praesentium laborum pariatur earum <a href="">quaerat</a> cupiditate consequuntur facilis ullam dignissimos, aperiam quam veniam.</p>
+      <p>Cum ipsam quod, incidunt sit ex <a href="">tempore</a> placeat maxime <a href="">corrupti</a> possimus <a href="">veritatis</a> ipsum fugit recusandae est doloremque? Hic, <a href="">quibusdam</a>, nulla.</p>
+      <p>Esse quibusdam, ad, ducimus cupiditate <a href="">nulla</a>, quae magni odit <a href="">totam</a> ut consequatur eveniet sunt quam provident sapiente dicta neque quod.</p>
+      <p>Aliquam <a href="">dicta</a> sequi culpa fugiat <a href="">consequuntur</a> pariatur optio ad minima, maxime <a href="">odio</a>, distinctio magni impedit tempore enim repellendus <a href="">repudiandae</a> quas!</p>
+    </div>
+
+  <script>
+    const triggers =document.querySelectorAll('a');//a태그 달린 모든 요소
+    const highlight = document.createElement('span');
+    //원래 html에는 없는 span태그를 생성시킴
+    highlight.classList.add('highlight');//highlight 태그 생성
+    document.body.append(highlight);//문서 바디에 highlight추가
+
+    function highlightLink(){
+        const linkCoords = this.getBoundingClientRect();
+        //getBoundingClientRect는 링크, 뷰포트와 엘리먼트의 크기를 알려줌
+        console.log(linkCoords);
+        const coords = {
+            width: linkCoords.width,
+            height: linkCoords.height,
+            top: linkCoords.top  + window.scrollY,
+            left: linkCoords.left + window.scrollX
+        };
+        //스크롤이 내려가도 구현 할수 있도록 해당 화면의 스크롤 좌우 위치를
+        // 구해서 더해줌
+
+        highlight.style.width =`${coords.width}px`
+        highlight.style.height =`${coords.height}px`
+        //highlight의 크기를 위에서 구한 값만큼 맞춤
+        highlight.style.transform = `translate(${coords.left}px,
+        ${coords.top}px)`//highlight의 기능을 구현 했지만 스크롤하면
+        //이상해짐
+    }
+
+    triggers.forEach(a => a.addEventListener('mouseenter',highlightLink)); 
+  </script>
+</body>
+</html>
