@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color: black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+
+    const hero = document.querySelector('.hero');//.hero태그 달린 모든
+    const text = hero.querySelector('h1');//그중에서 h1태그 달린 모든
+    const walk = 100;// 그림자가 퍼질 거리를 100으로 조절
+
+    function shadow(e){
+        const {offsetWidth: width, offsetHeight: height} = hero;
+        //width와 heigth는 hero(원본 이미지)의 높이와 넓이
+        let {offsetX: x , offsetY: y} = e;// 마우스 커서의 위치를 xy좌표
+        //에 담음
+
+        if(this !== e.target){//xy좌표에찍혀진 곳중에 클래스명이 서로 다른
+        //애들(hero, 즉 원본 이미지)이 있다면
+            x = x+e.target.offsetLeft;
+            y = y+e.target.offsetTop;
+            //x,y축을 이미지의 좌 상단(Left,Top)에 이동 시켜 고정
+        }
+
+        const xWalk = (x/width*walk) -(walk/2);// 100만큼 가면 그림이 매우 크게 
+        //움직여서 위에 구문 처리 => 100만큼 가면 50,-50에 위치
+        const yWalk = (y/width*walk) -(walk/2);
+        //y축도 마찬가지
+        text.style.textShadow = `
+        ${xWalk}px ${yWalk}px 0 rgba(255,0,255,0.7),
+        ${xWalk * -1}px ${yWalk}px 0 rgba(0,255,255,0.7),
+        ${yWalk}px ${xWalk * -1}px 0 rgba(0,255,0,0.7),
+        ${yWalk*-1}px ${xWalk * -1}px 0 rgba(0,0,255,0.7)
+        `
+        //그림자의 색을 각각 따로 지정
+        //그리고 그림자를 4방에 둘것이기 때문에 -를 각각 붙여줌
+    }
+    hero.addEventListener('mousemove',shadow);
+    //히어로에게마우스 무브라는 이벤트를 들으면 세도우 함수 실해 명령
+</script>
+</body>
+</html>
