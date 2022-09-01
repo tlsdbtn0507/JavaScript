@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+    const canvas = document.querySelector('#draw');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    ctx.strokeStyle = "#BADASS";
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';//붓의 모양
+    ctx.lineWidth = 100;//붓의 넓이
+    // ctx.globalCompositionOperation = 'multiply'; 이걸 실행하면
+    //겹치는 부분은 검은색
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let hue = 0;
+    let direction = true;
+
+    function draw(e){
+        if(!isDrawing) return;//=>마우스가 다운되지 않을땐 실행을 멈춰라
+        console.log(e);
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.beginPath();
+        //start from lastX,Y가 00
+        ctx.moveTo(lastX,lastY);
+        //go to
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+
+        // lastX = e.offsetX;//이 구문들을 넣어주면 마우스의 움직임에 따라
+        // lastY = e.offsetY;//선이 그려짐
+
+        hue++;//위에 hue가 0으로 설정되고 갈수록 입력값이 높아져서 칠할수록
+              //색이 변함
+        if(hue>=360){
+            hue = 0;//색은 최대 360까지 변경 가능
+        }
+        if (ctx.lineWidth >= 100|| ctx.lineWidth <=1){
+            direction = !direction;//붓의 넓이가 100보다 커지고 1보다 작아지면
+                                   //direction을 뒤집음 
+        }
+        if (direction){
+            ctx.lineWidth ++;// 100부터 작아짐
+        } else{
+            ctx.lineWidth --;// 1부터 커짐
+        }
+    }
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        [lastX,lastY] = [e.offsetX, e.offsetY];
+        //선이 0,0에서 시작하므로 맨 처음 마우스 내려간 곳이 시작점임을
+        //설정해 놓음
+    });
+    canvas.addEventListener('mousemove', draw);//마우스를 누른채 실행(그림)
+    //마우스 다운(클릭중)이면 그림을 그리고 있다고 인식
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    //마우스 업(클릭을 땜)이라면 그림을 멈췄다고 인식
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+    //마우스 아웃이라면 그림을 멈췄다고 인식
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
