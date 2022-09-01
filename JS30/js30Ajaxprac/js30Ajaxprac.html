@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+//도시들의 정보가 담긴 주소
+
+const cities =[];
+
+fetch(endpoint)
+    .then(blob => blob.json())//endpoint의 데이터를 정리함
+    .then(data => cities.push(...data));//blob.json()이 새로운 promise를 
+    //생성해서 또다시 then사용. 위에서 나온 data를 cities에 넣기 위해 push  
+
+
+
+//fetch(promise)를 활용하기 위해 then을 사용
+//then을 쓰면 로그 출력의 순서를 바꿀 수 있음
+
+function findMatches(wordToMatch, cities){
+    return cities.filter(place => {
+        // ||은 둘중 어느하나가 true라면 true, 여기까지 작성하고 콘솔에 
+        //findMatches('bos',cities) 하면 {obj,obj} 안에 보스턴, 보시에 
+        //시티가 나옴
+        const regex = new RegExp(wordToMatch, 'gi');//gi = glbal insensitive
+        return place.city.match(regex) || place.state.match(regex)
+        //city state에 regex값(입력값)이 둘중 어느 하나라도 맞는다면
+        //결과를 보여줌
+    });
+}
+
+function numberWithCommas(x){
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+
+function displayMatches(){
+    const matchArray = findMatches(this.value, cities);
+    const html = matchArray.map(place => {
+        const regex = new RegExp(this.value, 'gi');//RegExp를 통해 찾은 값을
+        
+        const cityName = place.city.replace(regex, `<span class="h1">${this.value}</span>`);
+        const stateName = place.state.replace(regex, `<span class="h1">${this.value}</span>`);
+        //검색 결과에서 찾은 값(this.value)만 강조해주는 구문
+        //ex) bost을 검색하면 boston에서 bost만 노란색으로 강조
+        return`
+        <li>
+            <span class="name">${cityName}, ${stateName}</span>
+            <span class="population">${numberWithCommas(place.population)}</span>
+        </li>
+        `//검색 할때 밑에 내려오는 suggestion들에 cityName/StateName/인구 나오게함
+        ;
+    }).join('');
+    suggestions.innerHTML = html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchInput.addEventListener('change', displayMatches);
+//searchInput의 .search가 change하면 displayMatches함수 실행  
+//displayMatches가 검색 한 결과가 콘솔에서 뜬다 하지만 금방 사라짐
+searchInput.addEventListener('keyup',displayMatches);
+//그를 대비하기 위해 keyup이 계속 감지되면 검색의 결과 유지
+
+</script>
+</body>
+</html>
