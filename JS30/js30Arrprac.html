@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪</title>
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+    // Get your shorts on - this is an array workout!
+    // ## Array Cardio Day 1
+
+    // Some data we can work with
+
+    const inventors = [
+      { first: 'Albert', last: 'Einstein', year: 1879, passed: 1955 },
+      { first: 'Isaac', last: 'Newton', year: 1643, passed: 1727 },
+      { first: 'Galileo', last: 'Galilei', year: 1564, passed: 1642 },
+      { first: 'Marie', last: 'Curie', year: 1867, passed: 1934 },
+      { first: 'Johannes', last: 'Kepler', year: 1571, passed: 1630 },
+      { first: 'Nicolaus', last: 'Copernicus', year: 1473, passed: 1543 },
+      { first: 'Max', last: 'Planck', year: 1858, passed: 1947 },
+      { first: 'Katherine', last: 'Blodgett', year: 1898, passed: 1979 },
+      { first: 'Ada', last: 'Lovelace', year: 1815, passed: 1852 },
+      { first: 'Sarah E.', last: 'Goode', year: 1855, passed: 1905 },
+      { first: 'Lise', last: 'Meitner', year: 1878, passed: 1968 },
+      { first: 'Hanna', last: 'Hammarström', year: 1829, passed: 1909 }
+    ];//= objects
+
+    const people = [
+      'Bernhard, Sandra', 'Bethea, Erin', 'Becker, Carl', 'Bentsen, Lloyd', 'Beckett, Samuel', 'Blake, William', 'Berger, Ric', 'Beddoes, Mick', 'Beethoven, Ludwig',
+      'Belloc, Hilaire', 'Begin, Menachem', 'Bellow, Saul', 'Benchley, Robert', 'Blair, Robert', 'Benenson, Peter', 'Benjamin, Walter', 'Berlin, Irving',
+      'Benn, Tony', 'Benson, Leana', 'Bent, Silas', 'Berle, Milton', 'Berry, Halle', 'Biko, Steve', 'Beck, Glenn', 'Bergman, Ingmar', 'Black, Elk', 'Berio, Luciano',
+      'Berne, Eric', 'Berra, Yogi', 'Berry, Wendell', 'Bevan, Aneurin', 'Ben-Gurion, David', 'Bevel, Ken', 'Biden, Joseph', 'Bennington, Chester', 'Bierce, Ambrose',
+      'Billings, Josh', 'Birrell, Augustine', 'Blair, Tony', 'Beecher, Henry', 'Biondo, Frank'
+    ];
+    
+    // Array.prototype.filter() = 말그대로 필터링
+    // 1. Filter the list of inventors for those who were born in the 1500's
+    
+    const fifteen = inventors.filter(inventor => //원래 필터 안에 들어가는 펑션을 애로우로 교체
+                    (inventor.year >=1500 && inventor.year<1600))
+                    //조건문을 위에 &&을 두번써서 간소화
+       console.table(fifteen);//log안하고 table하면 이쁘게 나옴
+
+                                            // const fifteen = inventors.filter(function(inventor){
+                                            //     if(inventor.year >= 1500 && inventor.year <1600){
+                                            //         return true;//inventor 중에 조건문에 만족하는 객체가 있을 경우
+                                            //                     //필터링 되어 객체들이 걸러짐
+                                            //     }
+                                            // });
+                                            // console.table(fifteen);
+
+    // Array.prototype.map() = 새로운 배열로 다시 만드는 것 
+    // 2. Give us an array of the inventors first and last names
+
+    const fullname = inventors.map(inventor => //연결 한걸 맵핑으로 배열을 새로 쌈
+    `${inventor.first}${inventor.last}`);//inventor의 성 이름을 연결함
+    console.log(fullname);
+    
+
+    // Array.prototype.sort() ~ 순으로 정렬
+    // 3. Sort the inventors by birthdate, oldest to youngest
+
+    // const ordered = inventors.sort(function(a,b){//a,b를 firstman secondman들어갈 자리에 대입
+    //     if(a.year>b.year){//a와 b의 year를 비교해서
+    //         return 1; 둘을 비교해서 큰 사람이 위로
+    //     } else{
+    //         return -1; 작은 사람이 아래로
+    //     }
+    // });
+    // console.table(ordered); 위에 6줄을 단 2줄로 축약가능 ㄹㅇ
+
+    const ordered = inventors.sort((a,b)=> a.year > b.year ? 1 :-1);
+    console.table(ordered);     //펑션을 애로우로 바꿔주고 
+                                //a.year가 b.year >(보다) ?(크냐?)고 묻고 
+                                //맞으면 1 아니면 -1
+    // Array.prototype.reduce()
+    // 4. How many years did all the inventors live all together?
+
+                                    // var totalyears =0;
+                                    // for(var i= 0; i < inventors.length; i++){
+                                    //         totalyears += inventors[i].year
+                                    //     }
+                                    // console.log(totalyears);
+    const totalyears = inventors.reduce((total,inventor)=>{
+      //인벤터와 토탈을 불러서
+        return total + (inventor.passed - inventor.year);
+    },0);
+    //인벤터의 사망년에서 출생을 뺀 향년,수명의 나이를 구함
+    //모든 인벤터들의 수명을 합산
+   console.log(totalyears);
+
+    // 5. Sort the inventors by years lived
+    const oldest = inventors.sort(function(a,b){
+      //위에서 다룬 sort에
+        const lastGuy = a.passed - a.year;//수명을 구하고
+        const nextGuy = b.passed - b.year;//수명을 구하고
+        return lastGuy > nextGuy ? -1 : 1;
+        //둘의 수명을비교해서 수명이 긴 사람 순으로 sort 
+    });
+    console.table(oldest);
+
+    // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
+    // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+
+    // const category = document.querySelector('.mw-category');
+    // const links = Array.from(category.querySelectorAll('a'));
+    //  모든 링크에서 배열을 해라    카테고리 안의 내용은 모든 링크를 보여주는 것   
+    // const de = links
+    // .map(link=>link.textContent) => 딱 여기까지 하면
+    //                                 링크에 textcontent에 de가 들어간
+    //                                 내용들을 맵핑(새로 배열화)하는것
+    // .filter(streetName => streetName.includes('de'));
+    //=> 위를 실행 하면 de가 들어간 거리명을 필터링 하는 것
+
+    //여기에 실행하는 게 아니라 위 링크의 콘솔에서 하는 것
+
+
+
+
+    // 7. sort Exercise
+    // Sort the people alphabetically by last name
+    const alpha = people.sort((lastOne, nextOne)=>{
+        const [aLast, aFirst] = lastOne.split(', ');
+        //lastone에 들어갈 사람을 성 이름 순으로 쓰고 성과 이름에 따옴표와 
+        //쉼표 추가
+        const [bLast, bFirst] = nextOne.split(', ');
+        return aLast > bLast ? 1:-1;
+        //a의 성이 b보다 (알파벳으로) 크냐? 맞으면 1(위) 아니면 -1(아래)
+    });
+    console.log(alpha);
+
+    // 8. Reduce Exercise
+    //reduce((이전 값, 현재값)=>{ 
+    // console.log (이전 값) console log(현재값) })하면 이전 현재/빈칸 현재
+    // 이런 식으로 나오는데 리턴 값을 넣어주면
+    //이전 현재/ 이전(앞의 현재) 현재/ 이전(앞의 현재) 현재/이런식으로 나옴
+    // 하지만 펑션 값 뒤에 변수를 넣어주면 
+    // 변수 현재/이전(앞의 현재) 현재/ 이전(앞의 현재) 현재 이런순으로 나옴
+    // Sum up the instances of each of these
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+
+    const transfortation = data.reduce(function(obj,item){
+        if(!obj[item]){
+            obj[item] = 0;
+        }// 만약 객체에 들어있는 아이템이 0이 아니라면
+        obj[item]++;// 객체의 아이템 개수를 증가시켜라
+        return obj;//리턴으로 객체
+    },{});//{}넣어줘서 결과값을 {}에 보관
+
+    console.log(transfortation);
+    // console.log(transfortaion)
+
+  </script>
+</body>
+</html>
