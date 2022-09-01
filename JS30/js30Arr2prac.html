@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪💪</title>
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+    // ## Array Cardio Day 2
+
+    const people = [
+      { name: 'Wes', year: 1988 },
+      { name: 'Kait', year: 1986 },
+      { name: 'Irv', year: 1970 },
+      { name: 'Lux', year: 2015 }
+    ];
+
+    const comments = [
+      { text: 'Love this!', id: 523423 },
+      { text: 'Super good', id: 823423 },
+      { text: 'You are the best', id: 2039842 },
+      { text: 'Ramen is my fav food ever', id: 123523 },
+      { text: 'Nice Nice Nice!', id: 542328 }
+    ];
+
+    // Some and Every Checks
+    // Array.prototype.some() // is at least one person 19 or older?
+    // const isAdult = people.some(function(person){
+    //     const currentYear = (new Date()).getFullYear();//getFullYear는 년도를출력
+    //     if(currentYear - person.year >=19){
+    //         return true;
+    //     }
+    // });
+
+    const isAdult = people.some(person => ((new Date())
+    .getFullYear()) - person.year >=19);
+    // 올해 년도를 구해서 리스트 안의 사람들의 나이를 뺀 것이 19보다 크거나
+    //같은 사람이 있냐 = isAdult
+    console.log({isAdult});
+    
+    // Array.prototype.every() // is everyone 19 or older?
+    const allAdult = people.every(person => ((new Date())
+    .getFullYear()) - person.year >= 19);
+        console.log({allAdult});
+    //올해 년도를 구해서 리스트 안의 모든 사람들이 19세 이상이냐 = Alladult
+
+    // Array.prototype.find()
+    // Find is like filter, but instead returns just the one you are looking for
+    // find the comment with the ID of 823423
+
+    // const comment = comments.find(function(comment){
+    //     if(comment.id ===823423){
+    //         return true;
+    //     }
+    // })
+    // comment라는 함수를 실행하는 데 comment의 id가 823423인 것을 찾아라
+    // console.log(comment); 
+
+    const comment = comments.find(comment => comment.id===823423);
+    console.log(comment);
+
+
+    // Array.prototype.findIndex()
+    // Find the comment with this ID
+    // delete the comment with the ID of 823423
+        const index = comments.findIndex(commment=>comment.id===823423)
+        console.log(index);
+        
+        // comments.splice(index,1) 이 구문과 table로 index를 띄우면 해당
+        //id만 잘 사라진것을 확인 가능
+
+        const newComments =[
+        ...comments.slice(0,index),
+        ...comments.slice(index+1)
+        ];
+        console.table(newComments);
+        //위 구문으로 해당 id만 빠지고 다른 id들이 정렬됨ㄴ
+  </script>
+</body>
+</html>
