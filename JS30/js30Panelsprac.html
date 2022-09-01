@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flex Panels 💪</title>
+  <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <style>
+    html {
+      box-sizing: border-box;
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-size: 20px;
+      font-weight: 200;
+    }
+    
+    body {
+      margin: 0;
+    }
+    
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    .panels {
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .panel {
+      background: #6B0F9C;
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      align-items: center;
+      /* Safari transitionend event.propertyName === flex */
+      /* Chrome + FF transitionend event.propertyName === flex-grow */
+      transition:
+        font-size 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+        flex 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+        background 0.2s;
+      font-size: 20px;
+      background-size: cover;
+      background-position: center;
+      
+      flex: 1;
+      justify-content:center;
+      align-items:center;
+      display : flex;
+      /* 화면을 키우고 글씨를 중간으로 내려오게함  */
+      flex-direction: column;
+      /* 글씨를 보기 좋게 3줄로 나눔 */
+    }
+
+    .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
+    .panel2 { background-image:url(https://source.unsplash.com/rFKUFzjPYiQ/1500x1500); }
+    .panel3 { background-image:url(https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&w=1500&h=1500&fit=crop&s=967e8a713a4e395260793fc8c802901d); }
+    .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
+    .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
+
+    /* Flex Children */
+    .panel > * {
+      margin: 0;
+      width: 100%;
+      transition: transform 0.5s;
+      /* border: 1px solid red; */
+      /* 테두리에 1픽셀 만큼 빨간색 */
+      flex: 1 0 auto;
+      /* 51열에서 나눈 3줄을 과하게 띄움 */
+      display: flex;
+      justify-content:center;
+      /* 글씨를 가운데로 옮김 */
+      align-items : center;
+      /* 각 칸의 글씨들을 각 분할의 중앙으로 옮김 */
+    }
+
+    .panel > *:first-child { transform: translateY(-100%);}
+     /*윗칸의 글씨들을 사라지게함  */
+    .panel.open-active > *:first-child{ transform: translateY(0);}
+     /*위의 기능을 원상태로 되돌림 */
+    .panel > *:last-child { transform: translateY(100%);}
+    /* 아래칸의 글씨들을 사라지게함 */
+    .panel.open-active > *:last-child{ transform: translateY(0);}
+    /* 위의 기능을 원상태로 되돌림 */
+
+    .panel p {
+      text-transform: uppercase;
+      font-family: 'Amatic SC', cursive;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
+      font-size: 2em;
+    }
+    
+    .panel p:nth-child(2) {
+      font-size: 4em;
+    }
+
+    .panel.open {
+        flex:5; 
+        /* panel이 open되면 5와 41과 43의 내용만큼 애니매에션 */
+      font-size: 40px;
+    }
+
+    .cta{
+        color: white;
+        text-decoration:none;
+    }
+
+  </style>
+
+
+  <div class="panels">
+    <div class="panel panel1">
+      <p>Hey</p>
+      <p>Let's</p>
+      <p>Dance</p>
+    </div>
+    <div class="panel panel2">
+      <p>Give</p>
+      <p>Take</p>
+      <p>Receive</p>
+    </div>
+    <div class="panel panel3">
+      <p>Experience</p>
+      <p>It</p>
+      <p>Today</p>
+    </div>
+    <div class="panel panel4">
+      <p>Give</p>
+      <p>All</p>
+      <p>You can</p>
+    </div>
+    <div class="panel panel5">
+      <p>Life</p>
+      <p>In</p>
+      <p>Motion</p>
+    </div>
+  </div>
+
+  <script>
+    const panels = document.querySelectorAll('.panel');
+    // panels라는 변수는 모든 .panel들이
+    
+    function toggleOpen(){
+        this.classList.toggle('open');
+    }
+    //이 toggleOpen 함수는 클래스에 open이라는 기능을 토글(누르면 키고 또누르면 꺼지는)
+    
+    function toggleActive(e){
+        if(e.propertyName.includes('flex')){
+            this.classList.toggle('open-active');
+        }
+    }
+    //이 toggleActive 함수는 toggleOpen에 의해 99의 패널이 트랜지션되고
+    //다른 언어들을 띄우기 위해 트랜지션을 감지하면 플랙스가 들어간 99의 패널
+    //에 open-active를 달아주고 토글하는 함수
+
+    panels.forEach(panel=> panel.addEventListener('click',toggleOpen));
+    // 변수panels는 모든 panel에게 click이라는 이밴트를 들으면 토글오픈을 
+    // 실행하거라
+    panels.forEach(panel=> panel.addEventListener('transitionend',
+    toggleActive));
+    // 변수panels는 모든 panel에게 clitransitionendck이라는 이밴트를 
+    //들으면 토글액티브를 실행하거라
+
+  </script>
+
+
+
+</body>
+</html>
