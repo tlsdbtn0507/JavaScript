@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after { 
+    box-sizing: inherit; 
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+
+<button></button>
+<script>
+
+    const divs = document.querySelectorAll('div');
+    const button = document.querySelector('button');
+    
+    function logText(e){
+        console.log(this.classList.value);//클릭된 것의 모든 클래스들의 값 
+        e.stopPropagation();//버블링을 멈춤
+        //capture를 false로 하고 이 함수를 적용하면 클릭된 버튼의 이름이 뜸
+    }
+
+
+    divs.forEach(div => div.addEventListener('click', logText, {
+        capture: false,//거짓으로 해놓으면 모든 div들이 응답하지만
+        //참으로 해놓으면 테두리쪽부터 쭉 응답
+        once:true
+        //원스는 클릭 이벤트를 듣지만 스스로를 unbind해서 한번만 실행하게함
+    }));
+    //모든 div들에게 이벤트 리스너를 줌
+    button.addEventListener('click', () => {
+        console.log('click!');
+    },{
+        once:true
+    });
+</script>
+</body>
+</html>
