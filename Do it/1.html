@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // prompt 첫사용
+        // let age = prompt("당신의 나이는?","0");
+
+        // if(age>=20){
+        //     document.write("성인입니다");
+        // } else{
+        //     document.write("삐빅");
+        // }
+        
+        // =! 첫사용
+        // var a =10;
+        // var b = 30;
+        // result =!(a>b);
+        //  document.write(result)
+
+        //prompt로 몸무게 찾기
+        // var name = prompt("적정 몸무게 찾기/ 당신의 이름은?","");
+        // var height = prompt("적정 몸무게 찾기/ 당신의 키는?","0");
+        // var weight = prompt("적정 몸무게 찾기/ 당신의 몸무게는?","0");
+
+        //-적정체중인지 아닌지
+        // var norW = (height-100)*9;
+        // var result = weight >=norW-5 && weight<= norW + 5;
+        // result = result ? "적정체중입니다" : "적정체중이 아닙니다";
+        // document.write(name+"님은"+result);
+
+        //- 저 적 과 체중 구하기
+        // const result = (height-100)*0.9;
+        // if(result>weight){
+        //     document.write(`${name}님은 저체중입니다`);
+        // } else if (result == weight){
+        //     document.write(`${name}님은 적정체중입니다`);
+        // } else{                                                                                                   
+        //     document.write(`${name}님은 과체중입니다`);
+        // }
+
+        // //진영이 용돈기입장
+        // var transFee = 3000;
+        // var foodFee = 6000;
+        // var drinkFee = 3000;
+
+        // var totalFee = transFee+foodFee+drinkFee;
+        // var result = totalFee>10000 ? totalFee-10000+"원 초과":"돈관리 짱!";
+        // document.write(result)
+
+        // //실적 조사
+        // var forthQ = prompt("4분기 실적은","0");
+        // var firstQ = 1200;
+        // var secondQ = 1300;
+        // var thirdQ = 1000;
+
+        // var avr =(firstQ+secondQ+thirdQ)/3
+
+        // var result = forthQ > avr ? "판매량이 평균 이상입니다": 
+        // "판매량이 평균 미달입니다"
+        // document.write(result);
+
+        // //confirm 첫사용
+        // var result = confirm("정말로 탈퇴하시겠습니까?");
+        // if(result){
+        //     document.write("처리되었습니다");
+        // } else{
+        //     document.write("반려되었습니다");
+        // }
+
+        //간단한 회원가입
+        // var id = "gngnqn";
+        // var pw ="5151513bcc";
+
+        // var idCh = prompt("아이디를 입력하시오","");
+        // var pwCh = prompt("비번을 입력하시오","");
+
+        // if(id == idCh){
+        //     if(pw == pwCh){
+        //         document.write(`${id}님 환영합니다!`);
+        //     } else{
+        //         alert("입력하신 비번이 다릅니다");
+        //         location.reload();
+        //     }
+        // } else{
+        //     alert("입력하신 아이디가 다릅니다");
+        //     location.reload();
+        // }
+            
+        //스위치문
+        // var site = prompt("즐겨보는 사이트는?","");
+        // switch(site){
+        //     case "구글": url ="https://www.google.com/";
+        //     break;
+        //     case "네이버": url ="https://www.naver.com/";
+        //     break;
+        //     case "다음": url ="https://www.daum.net/";
+        //     break;
+        //     case "야후": url ="https://www.yahoo.com/?guccounter=1&guce_referrer=aHR0cHM6Ly9zZWFyY2gubmF2ZXIuY29tL3NlYXJjaC5uYXZlcj93aGVyZT1uZXhlYXJjaCZzbT10b3BfaHR5JmZibT0xJmllPXV0ZjgmcXVlcnk9JUVDJTk1JUJDJUVEJTlCJTg0&guce_referrer_sig=AQAAANggWI87WVEF0dwFz7a2BB7ISbJr907Sq_22NK5jWNnjyhyTh82fNC8BsN7qgjlxVxa5lPQUDXXNbNxcz9iajypAtJ-iSHEaVBG4Hl24aMztyuhxVBs1jzy2xe_v1KlggT0auUVyM0Nrh6JVlkwlBVNh5i0KI4H1Pn3MK67Pz5hN";
+        //     break;
+        //     default : alert("보기중에 없는 사이트 입니다");
+        // }
+
+        // if(url) location.href = url;
+
+        //반복문
+        // var i =20;
+        // while(i>=10){
+        //     if(i%2==0){
+        //         document.write("<p class='blue'>"+i +"</p>");
+        //     } else{
+        //         document.write("<p class='red'>"+i +"</p>");
+
+        //     }
+        //     i--;
+        // }
+
+        //중첩for
+        // for(var i = 1; i<3;i++){
+        //     for (let j = 1; j < 3; j++) {
+        //         document.write(i + "행" + j+ "열","<br>")
+        //     }
+        //     document.write("<br>")
+        // }
+
+        //5단
+        // let i = 1;
+        // while(i<10){
+        //     document.write("5X"+i+"="+5*i,"<br/>");
+        //     i++;
+        // }
+
+        //5행5열
+        // var num =1;
+        // var t ="<table border =1>";
+        //     for (let i = 1; i <= 5; i++) {
+        //         t+="<tr>";
+        //             for (let j = 1; j <=5; j++) {
+        //                 t+="<td>"+num+"</td>";
+        //                 num++;
+        //             }
+        //             t+="</tr>";
+        //     }
+        //     t+="</table>";
+        //     console.log(t);
+        //     document.write(t);
+
+        //연말 계산기
+
+        // var today = new Date();
+        // var nowY = today.getFullYear();
+
+        // var theDate = new Date(nowY,12,31);
+        // var difDate = theDate.getTime()-today.getTime();
+        // var result = Math.ceil(difDate/(60*1000*60*24));
+        // document.write(`연말 D-day: ${result}일 남았습니다.`);
+
+        //가위바위보
+        // document.write("<h1>가위바위보</h1>")
+
+        var game = prompt("가위 바위 보 중 고르세요","");
+        var gameNum;
+
+        switch(game){
+            case "가위":
+            gameNum=1;break;
+            case "바위":
+            gameNum=2;break;
+            case "보":
+            gameNum=3;break;
+            default : alert("잘못작성했습니다");
+            location.reload();
+        }
+
+        var rsp = ["가위","바위","보"]
+        var com = Math.ceil(Math.random()*3);
+        document.write(com)
+        if(gameNum==com){
+            document.write("비겼습니다")
+        } else if(gameNum>com){
+            document.write("이겼습니다")
+        } else{
+            document.write("메롱")
+        }
+    </script>
+
+</body>
+</html>
