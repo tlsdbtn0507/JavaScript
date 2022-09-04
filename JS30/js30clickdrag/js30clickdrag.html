@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click and Drag</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="items">
+    <div class="item item1">01</div>
+    <div class="item item2">02</div>
+    <div class="item item3">03</div>
+    <div class="item item4">04</div>
+    <div class="item item5">05</div>
+    <div class="item item6">06</div>
+    <div class="item item7">07</div>
+    <div class="item item8">08</div>
+    <div class="item item9">09</div>
+    <div class="item item10">10</div>
+    <div class="item item11">11</div>
+    <div class="item item12">12</div>
+    <div class="item item13">13</div>
+    <div class="item item14">14</div>
+    <div class="item item15">15</div>
+    <div class="item item16">16</div>
+    <div class="item item17">17</div>
+    <div class="item item18">18</div>
+    <div class="item item19">19</div>
+    <div class="item item20">20</div>
+    <div class="item item21">21</div>
+    <div class="item item22">22</div>
+    <div class="item item23">23</div>
+    <div class="item item24">24</div>
+    <div class="item item25">25</div>
+  </div>
+
+<script>
+
+    const slider = document.querySelector('.items');
+    let isDown = false;//click or not을 알기위해 
+    let startX;// 아래서 값이 선언 될것이기에 여기서 변수만 정함
+    let scrollLeft;
+
+    slider.addEventListener('mousedown',(e) =>{
+        isDown =true; // 마우스 클릭
+        slider.classList.add('active')//siler(.items)에 엑티브라는 css추가
+        startX = e.pageX - slider.offsetLeft;
+        //e.pageX는 마우스가 클릭된 X위치. item를 맞추기 위해 e.pageX에 
+        //left빼줌
+        scrollLeft =  slider.scrollLeft;//드래그 따라 화면이 옆으로 스크롤
+    })
+    slider.addEventListener('mouseleave',() =>{
+        slider.classList.remove('active')//siler(.items)에 엑티브라는 css삭제
+        isDown =false;
+        
+    })
+    slider.addEventListener('mouseup',() =>{
+        slider.classList.remove('active')
+        isDown =false;
+
+    })
+    slider.addEventListener('mousemove',(e) =>{
+        if(!isDown) return;//mouse가 클릭이 되있으면 밑에 실행
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = x-startX;//처음 클린한 곳에서 마우스가 움직일때의 거리
+        slider.scrollLeft = scrollLeft - walk;
+        //그냥 실행하면 잘 안되서 위에서 실행한 scrollLeft변수 값을 빼줌
+    })
+
+
+</script>
+
+  </body>
+</html>
