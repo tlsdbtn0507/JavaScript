@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Random Number Game</h1>
+    <h3>Generate a number between 0 and<input type="number" id ="generateNum"></h3>
+    <h4>Guess the number<input type="number" id="guessNum">
+    <input type="button" id="button" value="play!">
+    <h4 class="hidden" id="comChoice"></h4>
+    <h4 class="hidden" id="result"></h4>
+</body>
+
+<script>
+const generateNum = document.querySelector("#generateNum");
+const guessNum = document.querySelector("#guessNum");
+const onclickBtn = document.querySelector("#button");
+const comChoice = document.querySelector("#comChoice");
+const result = document.querySelector("#result");
+
+const GENERATE_NUM = "generateN";
+const GUESS_NUM="guessN";
+
+function playBtn(e){
+  e.preventDefault();
+  const generateN = generateNum.value;
+  const guessN = guessNum.value;
+  localStorage.setItem(GENERATE_NUM,generateN);
+  localStorage.setItem(GUESS_NUM,guessN);
+  gameResult(guessN,generateN);
+}
+
+function gameResult (guessN,generateN){
+    let comN = Math.floor(Math.random()*parseInt(generateN));
+    comChoice.innerHTML = `You chose:${guessN} and com chose:${comN}`;
+    if(guessN!=comN){
+        result.innerHTML = "You lost";
+    }else{
+        result.innerHTML = "You won!";
+    }
+}
+onclickBtn.addEventListener('click', playBtn);
+</script>
+
+</html>
