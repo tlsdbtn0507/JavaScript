@@ -7,6 +7,7 @@
         <title>Document</title>
     </head>
     <body>
+        
         <!-- <p>
             <img src="images/window_object_1.jpeg" usemap="#intro"alt="신간 책 소개">
             <map name=""intro id="intro">
@@ -16,10 +17,21 @@
         </p> -->
         
         <script>
+        //배경색 바꾸기
+        // var color = ['white','yellow','aqua','purple'];
+        // var i = 0;
+        // function changeColor(){
+        //     i++;
+        //     if(i>=color.length){
+        //         i=0;
+        //     }
+        //     var bodyTag = document.querySelector('#theBody');
+        //     bodyTag.style.backgroundColor = color[i];
+        // }
         //windowpopup
         // window.open("winpopup.html","pop1","width=300,height=400,|left=300,top=50");
-
-
+            
+            
         // prompt 첫사용
         // let age = prompt("당신의 나이는?","0");
 
@@ -262,21 +274,86 @@
         // document.write("모니터 해상도 높이:"+scH+"px","<br>")
 
         //1mission129p
-        var phoneNum = "010-2345-6789";
-        var result1 = phoneNum.substring(0,9);
-        document.write(result1,"****<br>");
+        // var phoneNum = "010-2345-6789";
+        // var result1 = phoneNum.substring(0,9);
+        // document.write(result1,"****<br>");
 
-        var imgSrc = "images/bntOut.jpg";
-        var result2 = imgSrc.replace("Out","over");
-        document.write(result2,"<br>");
+        // var imgSrc = "images/bntOut.jpg";
+        // var result2 = imgSrc.replace("Out","over");
+        // document.write(result2,"<br>");
 
         //2mission129p
-        var menu = ['짜장면','돈까스','된장국','김치찌개','회덮밥'];
-        var menuNum = Math.floor(Math.random(menu.length)*5);
-        document.write(menuNum);
-        var result = menu[menuNum];
-        document.write(result);
+        // var menu = ['짜장면','돈까스','된장국','김치찌개','회덮밥'];
+        // var menuNum = Math.floor(Math.random(menu.length)*5);
+        // document.write(menuNum);
+        // var result = menu[menuNum];
+        // document.write(result);
         
+
+        //국영수 평균
+        // function testAvg(arrData){
+        // var sum=0;
+        // for(var i=0;i<arrData.length;i++){
+        //     sum += Number(prompt(arrData[i]+"점수는?","0"));
+        //     }
+        //     var avg = sum/arrData.length;
+        //     return avg
+        // }
+
+        // var arrSubject =['국어','수학'];
+        // var result = testAvg(arrSubject);
+   
+        // document.write("평균 점수는"+result+"점 입니다");
+
+        //1부터 10까지
+        // var num = 0;
+        // function testFnc(){
+        //     num++;
+        //     document.write(num,"<br>");
+        //     if(num==10)return;
+        //     testFnc();
+            
+        // }
+        // testFnc();
+
+        //돼지 판별기
+        function CheckWeight(name,height,weight){
+            this.userName = name;
+            this.userHeight = height;
+            this.userWeight = weight;
+            this.minWeight;
+            this.maxWeight;
+
+            this.getInfo = function(){
+                var str=""
+                str+="이름:"+this.userName+",";
+                str+="키:"+this.userHeight+",";
+                str+="몸무게:"+this.userWeight+"<br>";
+                return str;
+            }
+            this.getResult = function(){
+                this.minWeight=(this.userHeight-100)*0.9-5;
+                this.maxWeight=(this.userHeight-100)*0.9+5;
+
+                if(this.userWeight>=this.minWeight&&
+                this.userWeight<=this.maxWeight){
+                    return "정상몸무게입니다";
+                } else if(this.userWeight<this.minWeight){
+                    return "정상체중 미만입니다";
+                } else{
+                    return "정상체중보다 초과입니다";
+                }
+            }
+        }
+
+        var jang = new CheckWeight("장보리",168,62);
+        var park = new CheckWeight("박달재",188,90);
+
+        console.log(jang);
+        console.log(park);
+
+        document.write(jang.getInfo());
+        document.write(jang.getResult());
     </script>
 
 </body>
