@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Challenge2</title>
+</head>
+<body>
+   <script>
+    //test1
+    // const calAvg = (sc1,sc2,sc3) => (sc1+sc2+sc3)/3;
+    // let dolAvg = calAvg(44,23,71);
+    // let koaAvg = calAvg(65,54,49);
+    // function checkWinner (dolAvg,koaAvg){
+    //     if(dolAvg>=2*koaAvg){
+    //         console.log(`Dolphins win(${dolAvg} vs ${koaAvg})`);
+            
+    //     } else if (koaAvg>=2*dolAvg){
+    //         console.log(`Koalas win(${koaAvg} vs ${dolAvg})`);
+            
+    //     } else{
+    //         console.log('No team won')
+    //     }
+    // }
+    // checkWinner(dolAvg,koaAvg);
+    // checkWinner(100,300)
+    
+    // //test2
+    // dolAvg = calAvg(85,54,41);
+    // koaAvg = calAvg(23,34,27);
+    // checkWinner(dolAvg,koaAvg)
+
+    //array test
+    
+    // const calTip = function (a){
+    //     if(a>=50&&a<=300){
+    //         return tip = a*0.15;
+    //     } else {
+    //         return tip = a*0.2;
+    //     }
+    // }
+    // const bills = [125,555,44];
+    // const tips = [calTip(bills[0]),calTip(bills[1]),calTip(bills[2])]
+    // const totalValues =
+    // [tips[0]+bills[0],
+    // tips[1]+bills[1],
+    // tips[2]+bills[2]];
+    // console.log(bills)
+    // console.log(tips)
+    // console.log(totalValues)
+    
+    const markOb = {
+        firstName:'Mark',
+        lastName:'Miller',
+        weight:78,
+        height:1.69,
+        calBMI: function (){
+            this.BMI = this.weight/this.height**2;
+            return this.BMI
+        }
+    }
+    const johnOb = {
+        firstName:'John',
+        lastName:'Smith',
+        weight:92,
+        height:1.95,
+        calBMI: function (){
+            this.BMI = this.weight/this.height**2;
+            return this.BMI
+        }
+    }
+    markOb.calBMI();
+    johnOb.calBMI();
+
+    if(markOb.BMI>johnOb.BMI){
+        console.log(`${markOb.firstName}'s BMI(${markOb.BMI})is higher
+        than ${johnOb.firstName}'s (${johnOb.BMI})!`)
+    }else{
+        console.log(`${johnOb.firstName}'s BMI(${johnOb.BMI})is higher
+        than ${markOb.firstName}'s (${markOb.BMI})!`)
+
+    }
+
+
+   </script> 
+</body>
+</html>
