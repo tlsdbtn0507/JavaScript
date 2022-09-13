@@ -8,9 +8,9 @@
 </head>
 <body>
    <script>
-    //test1
-    // const calAvg = (sc1,sc2,sc3) => (sc1+sc2+sc3)/3;
-    // let dolAvg = calAvg(44,23,71);
+       // const calAvg = (sc1,sc2,sc3) => (sc1+sc2+sc3)/3;
+       //test1
+       // let dolAvg = calAvg(44,23,71);
     // let koaAvg = calAvg(65,54,49);
     // function checkWinner (dolAvg,koaAvg){
     //     if(dolAvg>=2*koaAvg){
@@ -50,37 +50,91 @@
     // console.log(tips)
     // console.log(totalValues)
     
-    const markOb = {
-        firstName:'Mark',
-        lastName:'Miller',
-        weight:78,
-        height:1.69,
-        calBMI: function (){
-            this.BMI = this.weight/this.height**2;
-            return this.BMI
+    // const markOb = {
+    //     firstName:'Mark',
+    //     lastName:'Miller',
+    //     weight:78,
+    //     height:1.69,
+    //     calBMI: function (){
+    //         this.BMI = this.weight/this.height**2;
+    //         return this.BMI
+    //     }
+    // }
+    // const johnOb = {
+    //     firstName:'John',
+    //     lastName:'Smith',
+    //     weight:92,
+    //     height:1.95,
+    //     calBMI: function (){
+    //         this.BMI = this.weight/this.height**2;
+    //         return this.BMI
+    //     }
+    // }
+    // markOb.calBMI();
+    // johnOb.calBMI();
+
+    // if(markOb.BMI>johnOb.BMI){
+    //     console.log(`${markOb.firstName}'s BMI(${markOb.BMI})is higher
+    //     than ${johnOb.firstName}'s (${johnOb.BMI})!`)
+    // }else{
+    //     console.log(`${johnOb.firstName}'s BMI(${johnOb.BMI})is higher
+    //     than ${markOb.firstName}'s (${markOb.BMI})!`)
+
+    // }
+
+    //final coding ch
+
+    const bills = [22,295,176,440,37,105,10,1100,86,52];
+    let tips = [];
+    let totals = [];
+    let avg=0;
+
+    
+    const calTip = function (a){
+        if(a>=50&&a<=300){
+            return tip = a*0.15;
+        } else {
+            return tip = a*0.2;
         }
     }
-    const johnOb = {
-        firstName:'John',
-        lastName:'Smith',
-        weight:92,
-        height:1.95,
-        calBMI: function (){
-            this.BMI = this.weight/this.height**2;
-            return this.BMI
+    
+    for(let i = 0 ; i <bills.length ; i++){
+        tips[i]=calTip(bills[i]);
+        for(let j = 0; j<tips.length; j++){
+            totals[j]= bills[j]+tips[j];
         }
     }
-    markOb.calBMI();
-    johnOb.calBMI();
+    // for(let i = 0 ; i <bills.length ; i++){
+    //     const tip = calTip(bills[i]);//bills에서 계산된 각각의 팁을
+    //     tips.push(tip);//tips배열에 넣고
+    //     totals.push(tip+bills[i]);//totals배열에 위에 선언된 팁과 bill의
+    //     //배열들속 값을 띄움
+    // }
 
-    if(markOb.BMI>johnOb.BMI){
-        console.log(`${markOb.firstName}'s BMI(${markOb.BMI})is higher
-        than ${johnOb.firstName}'s (${johnOb.BMI})!`)
-    }else{
-        console.log(`${johnOb.firstName}'s BMI(${johnOb.BMI})is higher
-        than ${markOb.firstName}'s (${markOb.BMI})!`)
-
+    for(let sum = 0; sum <totals.length; sum++){
+        avg +=totals[sum];
     }
+
+    const calAvg = function(a){
+       return a/10
+    }    
+
+    // const calAvg = function(arr){
+    //     let sum = 0;
+    //     for(let i = 0; i<arr.length; i++){
+    //         sum+= arr[i];
+    //     }
+    //     return sum/arr.length
+    // }
+    // calAvg([2,3,6])
+    // calAvg(totals)
+
+    console.log(totals)
+    console.log('avg:',calAvg(avg))
+
+    
+    
+
 
 
    </script> 
