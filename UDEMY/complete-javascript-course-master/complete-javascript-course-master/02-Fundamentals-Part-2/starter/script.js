@@ -247,26 +247,90 @@
 
 //-----------------------------------------------------
 
-const jonas =['Jonas','schmed',
-2037-1991,'teacher',['Michael','Peter','Steven'],true]
-;
-const types =[];//types라는 속이 빈 새 배열을 만들고
+// const jonas =['Jonas','schmed',
+// 2037-1991,'teacher',['Michael','Peter','Steven'],true]
+// ;
+// const types =[];//types라는 속이 빈 새 배열을 만들고
 
-for(let i =0; i<jonas.length ;i++){
-    //Reading from jonas array
-    console.log(jonas[i], typeof jonas[i]);
-    //Filling types array
-    //1) types[i] = typeof jonas[i];//반복문을 통해 jonas의 내용의 타입을 
-    //2) types.push(typeof jonas[i]);
+// for(let i =0; i<jonas.length ;i++){
+//     //Reading from jonas array
+//     console.log(jonas[i], typeof jonas[i]);
+//     //Filling types array
+//     //1) types[i] = typeof jonas[i];//반복문을 통해 jonas의 내용의 타입을 
+//     //2) types.push(typeof jonas[i]);
+// }
+// console.log(types)//types배열 안에 새로이 넣을수 있음
+
+// const years = [1991,1997,1998,2002];
+// const ages=[];
+
+// for(let i=0; i<years.length;i++){
+//     ages[i] =2037-years[i];
+// }
+// console.log(ages);
+
+// //continue break
+// console.log('--only strings---')
+// for(let i =0; i<jonas.length ;i++){
+//     if(typeof jonas[i]!=='string') continue;//string이 아닌게 있으면 건너뛰기
+
+//     console.log(jonas[i], typeof jonas[i]);
+// }
+
+
+// //-----------------------------------------------------
+// console.log('--break with number---')
+// for(let i =0; i<jonas.length ;i++){
+//     if(typeof jonas[i]==='number') break;
+
+//     console.log(jonas[i], typeof jonas[i]);//jonas shned 다음이 num이므로 break
+// }
+//--------------------------
+
+//loop backword and loop in loop
+
+//---------------------------
+
+// const jonas =[
+// 'Jonas',
+// 'schmed',
+// 2037-1991,
+// 'teacher',
+// ['Michael','Peter','Steven']
+// ];
+
+// for(let i = jonas.length-1; i>=0;i--){//반복문으로 배열을 역순으로 출력
+//     console.log(jonas[i]);
+// }
+
+// for(let exercise =1;exercise<=3;exercise++){
+//     console.log(`---starting exercise${exercise}--`);
+//     for(let rep = 1; rep <6; rep++){
+//         console.log(`Exercise ${exercise}:lifting weight rep ${rep}`);
+//     }
+// }
+
+//-------------------------------
+
+//while
+
+//-------------------------------
+
+// for(let rep = 1; rep <=10; rep++){
+//     console.log(`Lifting weights repetition ${rep}.`)
+// }
+
+// let rep = 1;
+// while(rep<=10){
+//     console.log(`While : Lifting weights repetition ${rep}.`)
+//     rep++
+// }
+
+let diceNum = Math.trunc(Math.random()*6)+1;
+
+while(diceNum!==6){
+    console.log(`You rolled a ${diceNum}`);
+    diceNum = Math.trunc(Math.random()*6)+1;
+    if(diceNum===6) console.log('Loop is about to end')
 }
-console.log(types)//types배열 안에 새로이 넣을수 있음
-
-const years = [1991,1997,1998,2002];
-const ages=[];
-
-for(let i=0; i<years.length;i++){
-    ages[i] =2037-years[i];
-}
-console.log(ages);
-//-----------------------------------------------------
 
