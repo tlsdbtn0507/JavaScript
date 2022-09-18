@@ -3,6 +3,30 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
+const renderCountry = function (data, className = '') {
+  const html = `
+     <article class="country ${className}">
+            <img class="country__img" src="${data.flag}" />
+            <div class="country__data">
+            <h3 class="country__name">${data.name}</h3>
+            <h4 class="country__region">${data.region}</h4>
+            <p class="country__row"><span>👫</span>${(
+              +data.population / 1000000
+            ).toFixed(1)}m</p>
+            <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+            <p class="country__row"><span>💰</span>${
+              data.currencies[0].name
+            }</p>;
+            </div>
+          </article>
+          `;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+};
+
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+};
+
 ///////////////////////////////////////
 
 // const getCountryData = function (country) {
@@ -46,26 +70,6 @@ const countriesContainer = document.querySelector('.countries');
 ////////////////////////////////////////////////////////////////////////////////
 
 //아래getCountryAndNeighbour에서 부른 국가 정보를 화면에 띄우는 기능
-const renderCountry = function (data, className = '') {
-  const html = `
-     <article class="country ${className}">
-            <img class="country__img" src="${data.flag}" />
-            <div class="country__data">
-            <h3 class="country__name">${data.name}</h3>
-            <h4 class="country__region">${data.region}</h4>
-            <p class="country__row"><span>👫</span>${(
-              +data.population / 1000000
-            ).toFixed(1)}m</p>
-            <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-            <p class="country__row"><span>💰</span>${
-              data.currencies[0].name
-            }</p>;
-            </div>
-          </article>
-          `;
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
-};
 
 // //json따와서 자료형으로 변환하고 renderCountry를 콜백으로 가짐
 // const getCountryAndNeighbour = function (country) {
@@ -168,25 +172,61 @@ const renderCountry = function (data, className = '') {
 
 //4.위에서 한거랑 똑같은 api에 fetch를 data 함수에 프라미스 적용 그러면
 //data 함수에서 fetch까지 실행하고 그 뒤는 2.처럼 실행
+//5. .then 함수를 fetch를 리턴하지 않고 fetch().then을 하는게 아니라 2.의 .then
+//함수에 붙여야 함 2의 .then에 붙이면 그대로 콜백함수가 되어 가독성을 낮춤
+//6. 프로미스가 오류(여기선 fetch가 인터넷 끊김으로 인한 오류)로 인해 reject될
+//경우를 대비해 에러를 알려줌
+//7. 6번 처럼 오류가 날 만한 곳에 handling error를 하지 말고 프로미스 체인의
+//가장 마지막줄에 캐치문을 넣으면 프로미스 체인 어느곳에서 오류가 나던 간에 그것을
+//캐치해 냄
+//8.콘솔에 에러의 원인을 명시하고 renderError라는 html에 오류의 원인과 메세지를
+//띄우는 함수를 실행시킴
+//9. finally 함수는 then이나 catch처럼 프로미스가 fulfilled이나 rejected되
+//던 간에 무조건 실행하는 함수로 꼭 써야하는 건 아님 보통 로딩 중을 띄울때 씀
 
-const getCountryData = function (country) {
-  //1.
-  fetch(`https://restcountries.com/v2/name/${country}`)
-    //2.
+// const getCountryData = function (country) {
+//   //1.
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     //2.
+//     .then(response => response.json() /*6.err => alert(err)*/)
+//     .then(data => {
+//       renderCountry(data[0]);
+//       //3.
+//       let neighNum = Math.floor(Math.random() * data[0].borders.length);
+//       const neighbour = data[0].borders[neighNum];
+
+//       if (!neighbour) return;
+//       //4.
+//       return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+//     })
+//     //5.
+//     .then(response => response.json() /*6.,err => alert(err)*/)
+//     .then(data => renderCountry(data, 'neighbour'))
+//     //7.
+//     .catch(err => {
+//       console.error(`${err}`);
+//       //8.
+//       renderError(`Error is occured by:${err.message}.Try again`);
+//     })
+//     //9.
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+
+// btn.addEventListener('click', function () {
+//   // getCountryData('korea (Republic of)');
+//   getCountryData('france');
+// });
+
+//Coding Challenge
+
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
     .then(response => response.json())
     .then(data => {
-      renderCountry(data[0]);
-      //3.
-      let neighNum = Math.floor(Math.random() * data[0].borders.length);
-      const neighbour = data[0].borders[neighNum];
-
-      if (!neighbour) return;
-      //4.
-      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
-    })
-    .then(response => response.json())
-    .then(data => renderCountry(data, 'neighbour'));
+      console.log(data);
+    });
 };
 
-// getCountryData('korea (Republic of)');
-getCountryData('france');
+whereAmI(52.508, 13.381);
