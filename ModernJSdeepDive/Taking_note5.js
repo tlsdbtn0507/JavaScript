@@ -125,3 +125,114 @@ switch (month) {
     monthName = "Invalid month";
 }
 console.log(monthName);
+
+//5-3 반복문
+//조건식의 결과가 참인 경우 블록문을 실행하고 계속 조건식을 평가해서 결과가 거짓일 때 까지
+//블록문을 반복한다 자바스크립트에 반복문은 for /while / do...while이 있다
+
+//5-3-1 for문
+//조건식이 거짓으로 평가 될때까지 블록문을 반복한다
+//for(1.변수 선언문or 할당문 ; 2.조건식 ; 3.증감식){
+//   조건식이 참인 경우 반복될 문
+// }
+// 1.변수 선언문은 단 한번만 실행된다
+// 2.변수 선언문이 완료되면 그 옆에 조건식을 실행한다
+// 조건식이 참일 경우 옆에 증감식을 거치는게 아님 블록문으로 실행 흐름이 이어진다
+// 3. 블록문의 실행이 종료되면 증감식을 거쳐서 변수의 값이 증가한다
+// 계속 반복하다 조건식이 거짓일 경우 반복문은 종료된다
+
+//이중 중첩 for문 => 두 눈의 합이 6이 되는 모든 경우의 수 출력
+for (var i = 1; i <= 6; i++) {
+  for (var j = 1; j <= 6; j++) {
+    if (i + j === 6) console.log(`[${i},${j}]`);
+  }
+}
+
+//5-3-2 while문
+//while문은 조건식의 평가가 참이면 블록문을 반복실행 for문은 주로 반복횟수가 명확할 때,
+//while문은 반복횟수가 불명확 할때 쓴다 또한 조건문의 평가가 거짓이면 탈출한다
+
+var count = 0;
+while (count < 6) {
+  console.log(count); // 0 1 2 3 4 5
+  count++;
+}
+
+var count = 0;
+while (true) {
+  count++;
+  console.log(count);
+  if (count === 3) break; // if의 break가 없었다면 무한 루프
+}
+
+//5-3-3 do...while문
+//do...while문은 블록문을 먼저 실행 하고 조건식을 평가 한 다음 반복
+
+var count = 0;
+
+do {
+  console.log(count); // 0 1 2 3
+  count++;
+} while (count < 4);
+
+// do {
+//   count++;
+//   console.log(count); // 1 2 3 4
+// } while (count < 4);
+
+//5-4 break문
+// 앞서 살펴 본 듯 break문은 블록문을 탈출함 정확히는 레이블 문, 반복문 switch문을 탈출한다
+//저 3문 외에 break문을 쓰면 문법에러가 발생한다
+// if(true){
+//   break; // => uncaught syntaxerror
+// }
+//참고로 레이블 문이란 식별자가 붙은 문 ex) foo:console.log('foo');
+//레이블 문은 프로그램의 실행순서를 제어하는데 쓰인다 그래서 switch의 case, default 문도
+//레이블문 이다 레이블 문을 탈출하기 위해 break에 레이블 식별자를 지정한다
+
+foo: {
+  console.log(1); // 1만 출력
+  break foo;
+  console.log(2);
+}
+//중첩 for문의 내부 for문에서 break를 실행하면 내부 for문을 탈출해 외부 for로 진입 하지만
+// 내부 for 가 아닌 외부 for로 나가려면 레이블 문을 쓰면 된다
+
+outer: for (let x = 0; x < 3; x++) {
+  for (let i = 0; i < 3; i++) {
+    if (x + i === 3) break outer; // x나 i가 2,1 1,2 인 경우를 제외하고 전부 출력
+    console.log(`inner ${x},${i}`);
+  }
+}
+//이 레이블문은 중첩 for문을 탈출할때는 용이하지만 그외에는 사용 x 하지만 break문은
+//반복문 switch문에서 사용 가능
+
+var string = "hello world";
+var search = "l";
+var count;
+
+for (let i = 0; i < string.length; i++) {
+  if (string[i] === search) {
+    count = i;
+    break; // 배열의 2번째 자리에 l이 있어서 탈출
+  }
+}
+console.log(count);
+
+//5-5 continue문
+//continue문은 반복문의 블록문 실행을 해당 지점에서 중단하고 반복문의 증감식으로 실행 흐름
+//을 이동하고 break와 달리 반복문을 탈출하지 않음
+
+var string = "hello world";
+var search = "l";
+var count = 0;
+
+for (var i = 0; i < string.length; i++) {
+  // 'l'이 아니면 현 지점에서 실행을 중단하고 반복문의 증감식으로 이동
+  if (string[i] !== search) continue;
+  count++;
+}
+console.log(count);
+
+const regexp = new RegExp(search, "g");
+console.log(string.match(regexp).length); //위에 ㅣ개수 찾는 문과 동일한 기능
