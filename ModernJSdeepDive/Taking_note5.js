@@ -229,6 +229,8 @@ var count = 0;
 
 for (var i = 0; i < string.length; i++) {
   // 'l'이 아니면 현 지점에서 실행을 중단하고 반복문의 증감식으로 이동
+  // 조건식이 스트링을 지나는데 i가 아니라면 계속 진행 하다 i일때 다음 블록문으로 이동해서
+  //count가 증감
   if (string[i] !== search) continue;
   count++;
 }
@@ -236,3 +238,248 @@ console.log(count);
 
 const regexp = new RegExp(search, "g");
 console.log(string.match(regexp).length); //위에 ㅣ개수 찾는 문과 동일한 기능
+
+for (var i = 0; i < string.length; i++) {
+  // 위에 l개수 찾는 문과 동일한 기능
+  if (string[i] === search) count++;
+}
+
+for (var i = 0; i < string.length; i++) {
+  if (string[i] !== search) continue;
+  count++;
+}
+console.log(count);
+
+//
+//6 타입변환과 단축 평가
+//
+
+// 6-1 타입변환이란?
+//js에서 모든 값은 타입이 있고 그걸 개발자의 의도대로 바꿀 수 있는데 이를 명시적 타입변환
+//혹은 타입 캐스팅이라고 한다
+// 명시적 타입 변환1. 숫자를 문자로 'toString()'
+
+var x = 10;
+var string = x.toString();
+console.log(typeof string, string);
+
+//하지만 이는 일시적이고 다시 x변수를 참조하면 숫자가되있다
+typeof x; //number
+
+//또한 개발자의 의도와 관련없이 표현식의 평가 도중 암묵적 타입변환이 일어나는데 이는 다른
+//말로 타입 강제변환이라고도 한다
+
+//원래 원시 값(x 변수의 에를 들어 x=10 즉 숫자)은 변경 불가능한 값이여서 변경이 불가능하다
+//하지만 js엔진은 표현식을 에러없이 수행하기 위해 피연산자의 값을 암묵적 타입 변환을 강제
+//한다. 그리고 강제로 변환한 값은 한번 사용하고 버린다
+
+//에러를 줄이기 위해 자신이 작성한 코드에서 타입의 값을 예측 가능해야한다.
+
+// (10).toString() 보다 10+''이 더 가독성이 좋고 간결하다
+
+//6-2 암묵적 타입변환이란?
+// 피연산자가 모두 문자열 타입이여야 하는 문맥
+10 + "2"; // => 102
+// 피연산자 모두가 숫자 타입이여야 하는 문맥
+5 * "10"; // => 50
+"5" * "10"; // => 50
+// 피연산자 또는 표현식이 불리언 타입이어야 하는 문맥
+!0; // => true
+if (1) {
+} // => 0이 아니면 트루
+//6-2-1 문자열 타입으로 변환
+
+1 + "2"; // => 12
+//위 식의 + 는 피연산자('2')가 문자열이므로 문자열 연결 연산자가 된다. 고로 1은 자동으로
+//문자열로 암묵적 타입변환
+//숫자타입
+0 +
+  "" - // '0'
+  0 +
+  ""; // '-0'
+1 +
+  "" - // '1'
+  1 +
+  ""; // '-1'
+NaN + ""; // 'NaN'
+Infinity +
+  "" - // 'Infinity'
+  Infinity +
+  ""; // '-Infinity'
+
+//불리언, null, undefined 타입들은 ''만씌움
+true +
+  ""(
+    // 'true'
+
+    //심벌 타입
+    Symbol()
+  ) +
+  ""(
+    // TypeError : Cannot convert a Symbol value to string
+
+    //객체 타입
+    {}
+  ) +
+  ""; // "[object object]"
+Math +
+  ""[ // "[object Math]"
+    //[] + '' => ''
+    (10, 20)
+  ] +
+  ""(
+    // '10,20'
+    function () {}
+  ) +
+  ""; // 'function (){}'
+Array + ""; // 'function Array(){[native code]}'
+
+//6-2-2 숫자 타입으로 변환
+1 - "1"; // 0
+1 * "10"; //10
+1 / one; // NaN
+// 위 NaN 처럼 피 연산자를 숫자 타입으로 변환하지 못하는 경우에는 표현식 평가 결과가 NaN
+
+1 >
+  "0" + // true
+    //산술 연산자 뿐만 아니라 비교 연산자도 숫자 타입으로 변한한다
+
+    "" + // 0
+    "0" + // 0
+    "1" + // 1
+    "string" + // NaN
+    true + // 1
+    false + // 0
+    null + // 0
+    undefined; // NaN
+
+//6-2-3 불리언 타입
+//false, undefined, null, 0,-0, NaN, ''(빈문자열) 앞선 6개들은 암묵적으로 false로 평가되는
+//Falsy값 고로 if문의 조건식에 위 Falsy값들에 !을 쓰면 트루가 되므로 조건문 실행 가능
+// 6개의 값 외는 전부 Truthy값
+
+//6-3 명시적 타입변환?
+//개발자의 의도에 따라 명시적으로 타입변경 하는 방법은
+//1. 표준 빌트인 생성자(String, Number, Boolean)를 new 연산자 없이 호출하는법
+//2. 빌트인 메서드 사용
+//3. 암묵적 타입변환
+
+//6-3-1 문자열 타입으로 변환
+// 문자열이 아닌 값을 문자열로 타입하는 법
+//1. String 생성자 함수를 new 연산자 없이 호출하는 법
+//2. Object.prototype.toString 메서드를 사용하는 법
+//3. 문자열 연결 연산자를 이용하는 법
+
+//1.
+String(1); // '1'
+String(NaN); // 'NaN'
+String(infinity); // 'Infinity'
+String(true); // 'true'
+String(false)(
+  // 'false'
+
+  //2.
+  1
+).toString(); // '1'
+NaN.toString(); // 'NaN'
+true
+  .toString()(
+    // 'true'
+    false
+  )
+  .toString(); // 'false'
+
+//3.
+1 + ""; // '1'
+NaN + ""; // 'NaN'
+Infinity + ""; // 'Infinity'
+true + ""; // 'true'
+false + ""; // 'false'
+
+//6-3-2 숫자 타입으로 변환
+//숫자 타입으로 변환하는 법
+//1. Number 생성자 함수를 new 연산자 없이 호출하는 법
+//2. ParseInt, parseFloat 함수를 사용하는 법(이방법은 문자열만 가능)
+//3. +단항 산술 연산자를 이용하는 법
+//4. * 산술 연산자를 사용하는 법
+
+//1.
+Number("0"); // 0
+Number("1"); // 1
+Number(true); // 1
+Number(false); // 0
+
+//2.
+parseInt("1"); // 1
+parseInt("10.53"); // 10.53
+parseInt("0") + // 0
+  //3.
+  "0" + // 0
+  "1" + // 1
+  true + //0
+  false; //1
+
+//4.
+"0" * 1; // 0
+"-1" * 1; // -1
+"10.53" * 1; // 10.53
+
+//6-3-3 불리언 타입으로 변환
+// 불리언이 아닌 값을 불리언으로 바꾸는 법
+//1. Boolean 생성자 함수를 new 연산자 없이 호출하는 법
+//2. !부정 논리 연산자를 두 번 사용 하는 법
+
+//1.
+Boolean("x"); // true
+Boolean(""); // false
+Boolean("false"); // true
+Boolean(false); // false
+Boolean(0); // false
+Boolean(1); // true
+Boolean(NaN); // false
+Boolean(undefined); // false
+Boolean(Infinity); // true
+Boolean(null); // false
+Boolean({}); // true
+Boolean([]); // true
+
+//2
+!!"x"; // true
+!!""; // false
+!!"false"; // true
+!!0; // false
+!!1; // true
+!!NaN; // false
+!!Infinity; // true
+!!null; // false
+!!undefined; // false
+!!{}; // true
+!![]; // true
+
+//6-4 단축 평가란?
+//6-4-1 논리연산자 &&,|| 를 사용한 단축평가
+
+//6-4-1-1 &&
+"cat" && "dog"; // true
+//&& 은 두 피연산자가 true로 평가 될 때 true 반환
+
+//6-4-1-2 ||
+"cat" || "dog"; // true
+//|| 은 두 피 연산자중 하나가 true면 true
+// ||와 &&은 피연산자를 타입 변환하지 않고 그대로 반환하는데 이를 단축평가라고 한다
+// 단축평가는 표현식을 평가하는 도중 평가 결과가 확정되면 나머지 평가는 생략한다
+
+//논리합 연산자 ||
+"cat" || "dog"; // 'cat'
+false || "dog"; // 'dog
+"cat" || false; // 'cat'
+
+//논리 곱 연산자 &&
+"cat" && "dog"; // dog
+false && "dog"; // false
+"cat" && false; // false
+
+//단축 평가 표현식   평가결과
+true || anything; // true
+false || anything; // anything
+true && anything; // a
