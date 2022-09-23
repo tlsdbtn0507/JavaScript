@@ -76,6 +76,7 @@ var reslt = z % 2 ? "짝수" : "홀수"; //z%2의 값 0은 false로 암묵적 �
 //숫자 값인 경우가 많다 즉,
 //if else는 논리적 참, 거짓으로 실행할 코드블록을 결정하고
 //switch는 논리적 참, 거짓 보다 다양한 상황(case)에 따라 실행할 코드블록 결정
+
 //switch에서 표현식의 평가 결과가 case문을 통과해 실행하지만 switch문을 탈출하지 않고
 //switch 문이 끝날 때까지 모든 case문과 default까지 실행 한 것을 폴 스루(fall through) 라고함
 //case에 break를 쓰지 않으면 폴 스루의 결과가 나옴 break가 없다면 case의 표현식이 일치하지
@@ -219,7 +220,7 @@ for (let i = 0; i < string.length; i++) {
 }
 console.log(count);
 
-//5-5 continue문
+//5-5 continue문 *continue는 실행문임
 //continue문은 반복문의 블록문 실행을 해당 지점에서 중단하고 반복문의 증감식으로 실행 흐름
 //을 이동하고 break와 달리 반복문을 탈출하지 않음
 
@@ -229,8 +230,8 @@ var count = 0;
 
 for (var i = 0; i < string.length; i++) {
   // 'l'이 아니면 현 지점에서 실행을 중단하고 반복문의 증감식으로 이동
-  // 조건식이 스트링을 지나는데 i가 아니라면 계속 진행 하다 i일때 다음 블록문으로 이동해서
-  //count가 증감
+  // 조건식이 스트링을 지나는데 i가 아니라면 계속 진행 하다 i일때 다음 블록문인 count++로 이동해서
+  //count가 증가
   if (string[i] !== search) continue;
   count++;
 }
@@ -263,7 +264,7 @@ var x = 10;
 var string = x.toString();
 console.log(typeof string, string);
 
-//하지만 이는 일시적이고 다시 x변수를 참조하면 숫자가되있다
+//하지만 이는 일시적이고 다시 x변수를 참조하면 숫자가되있다 이는 다른말로 부수효과가 없다고도 한다
 typeof x; //number
 
 //또한 개발자의 의도와 관련없이 표현식의 평가 도중 암묵적 타입변환이 일어나는데 이는 다른
@@ -287,11 +288,13 @@ typeof x; //number
 !0; // => true
 if (1) {
 } // => 0이 아니면 트루
+
 //6-2-1 문자열 타입으로 변환
 
 1 + "2"; // => 12
 //위 식의 + 는 피연산자('2')가 문자열이므로 문자열 연결 연산자가 된다. 고로 1은 자동으로
 //문자열로 암묵적 타입변환
+
 //숫자타입
 0 +
   "" - // '0'
@@ -514,11 +517,12 @@ console.log(message); // done
 
 var elem = null;
 //var value = elem.value -> TypeError: Cannot read property 'value' of null
-var value = elem && elem.value;
+var value = elem && elem.value; // value를 콘솔로그로 찍으면 null
+//위 문은 만약 elem이 참이라면 elem을 반환하고 elem이 참이 아니라면 elem.value를 반환
 
-//2.함수 배개변수(parameter)에 기본값을 설정할 때
+//2.함수 매개변수(parameter)에 기본값을 설정할 때
 //함수를 호출 할 때 인수를 전달하지 않으면 매개변수에는 undefined가 할당된다 이때
-//단축평가로 배개변수의 기본값을 설정하면 undefined로 인한 에러를 방지 할 수 있다
+//단축평가로 매개변수의 기본값을 설정하면 undefined로 인한 에러를 방지 할 수 있다
 
 function getStringLength(str) {
   str = str || "";
@@ -545,7 +549,7 @@ var value = elem?.value; // undefined | 만약elem이 null이 아니였다면 el
 
 var elem = null;
 var value = elem && elem.value;
-console.log(value); // -> null
+console.log(value); // -> null // elem이 거짓값이였다면 elem 반환 elem이 참이라면 elem.value반환
 //&&는 거짓값이면 좌항 피연산자(elem)을 그대로 반환함. 같은 거짓값인 0,''도 마찬가지이지만
 //0,''은 객채로 평가될 때도 있다
 
@@ -572,4 +576,4 @@ console.log(foo); // -> 'default string'
 //피연산자를 반환한다
 
 var foo = "" ?? "string";
-console.log(foo);
+console.log(foo); // 빈값 ''가 나옴
