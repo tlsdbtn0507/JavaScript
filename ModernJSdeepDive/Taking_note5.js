@@ -458,7 +458,6 @@ Boolean([]); // true
 
 //6-4 단축 평가란?
 //6-4-1 논리연산자 &&,|| 를 사용한 단축평가
-
 //6-4-1-1 &&
 "cat" && "dog"; // true
 //&& 은 두 피연산자가 true로 평가 될 때 true 반환
@@ -482,4 +481,95 @@ false && "dog"; // false
 //단축 평가 표현식   평가결과
 true || anything; // true
 false || anything; // anything
-true && anything; // a
+true && anything; // anything
+false && anything; // false
+
+//단축 평가로 if문을 대체할 수 있다. 어떤 조건이 참값일 때 무언가를 해야 한다면 논리곱(&&)
+//연산자 표현식으로 if문을 대체할 수 있다.
+
+var done = true;
+var message = "";
+if (done) message = "finished";
+
+//위 문을 단축평가로 대체할 수 있다
+
+message = done && "완료";
+console.log(message);
+
+//if문 처럼 쓸수 있기에 삼항 연산자로 사용가능하다
+var done = true;
+var message = "";
+
+if (done) message = "완료";
+else message = "미완료";
+
+console.log(message);
+// 삼항연산
+message = done ? "done" : "undone";
+console.log(message); // done
+
+//단축 평가를 유용하게 쓰는 법
+//1.객채를 예상하는 변수의 값이 null undefined 인 경우 에러가 발생하는데 여기서
+//단축 평가를 실행하면 에러가 발생하지 않는다
+
+var elem = null;
+//var value = elem.value -> TypeError: Cannot read property 'value' of null
+var value = elem && elem.value;
+
+//2.함수 배개변수(parameter)에 기본값을 설정할 때
+//함수를 호출 할 때 인수를 전달하지 않으면 매개변수에는 undefined가 할당된다 이때
+//단축평가로 배개변수의 기본값을 설정하면 undefined로 인한 에러를 방지 할 수 있다
+
+function getStringLength(str) {
+  str = str || "";
+  return str.length;
+}
+
+getStringLength(); //-> 0 ||없이 실행하면 Uncaught TypeError: Cannot read properties of undefined (reading 'length')
+getStringLength("hi"); // -> 2
+
+//혹은 ES6에 업데이트된 매개변수의 기본값 설정
+
+function getStringLength(str = "") {
+  return str.length;
+}
+
+getStringLength();
+
+//6-4-2 옵셔널 체이닝 연산자
+//옵셔널 체이닝 연산자?.는 좌항의 피연산자가 null, undefined일 경우 undefined를 반환하고
+//null, undefined가 아니라면 우항의 프로퍼티 참조를 이어간다
+var elem = null;
+var value = elem?.value; // undefined | 만약elem이 null이 아니였다면 elem이라는 객체 안에
+// value를 찾아다 줌
+
+var elem = null;
+var value = elem && elem.value;
+console.log(value); // -> null
+//&&는 거짓값이면 좌항 피연산자(elem)을 그대로 반환함. 같은 거짓값인 0,''도 마찬가지이지만
+//0,''은 객채로 평가될 때도 있다
+
+var str = "";
+var length = str && str.length;
+console.log(length); // null undefined가 아닌 '아무'값도 나오지 않음
+//하지만 옵셔널 체이닝 ?.은 좌항 피연산자가 거짓값이여도 null, undefined가 아니면 우항의
+//프로퍼티 참조를 이어간다
+
+//6-4-3 null 병합 연산자
+//ES11에 도입된 null 병합연산자 ??는 좌항의 피연산자가 null 또는 undefined일 경우 우항의
+//피연산자를 반환하고 null 또는 undefined이 아니면 좌항의 피연산자를 반환한다.
+//이 연산자는 변수에 기본값을 설정할 때 유용하다
+
+var foo = null ?? "default String";
+console.log(foo); // default String
+
+//??이 없던때 ||연산자를 썼지만 ||의 좌항 피연산자가 거짓값이지만 0,''도 기본값이 되면
+//아래 처럼 예기치 못한 동작이 발생했다
+var foo = "" || "default string";
+console.log(foo); // -> 'default string'
+
+//하지만 ??연산자를 사용하면 좌항의 피연산자가 거짓값이더라도 null undefined 혹은 좌항의
+//피연산자를 반환한다
+
+var foo = "" ?? "string";
+console.log(foo);
