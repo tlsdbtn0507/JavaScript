@@ -378,19 +378,14 @@ String(1); // '1'
 String(NaN); // 'NaN'
 String(infinity); // 'Infinity'
 String(true); // 'true'
-String(false)(
-  // 'false'
+String(false);
+// 'false'
 
-  //2.
-  1
-).toString(); // '1'
-NaN.toString(); // 'NaN'
-true
-  .toString()(
-    // 'true'
-    false
-  )
-  .toString(); // 'false'
+//2.
+toString(1); // '1'
+toString(NaN); // 'NaN'
+toString(true); // 'true'
+toString(false); // 'false'
 
 //3.
 1 + ""; // '1'
