@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    const game = {
+        team1: 'Bayern Munich',
+        team2: 'Borrussia Dortmund',
+        players: [
+            [
+                'Neuer',
+                'Pavard',
+                'Martinez',
+                'Alaba',
+                'Davies',
+                'Kimmich',
+                'Goretzka',
+                'Coman',
+                'Muller',
+                'Gnarby',
+                'Lewandowski',
+            ],
+            [
+                'Burki',
+                'Schulz',
+                'Hummels',
+                'Akanji',
+                'Hakimi',
+                'Weigl',
+                'Witsel',
+                'Hazard',
+                'Brandt',
+                'Sancho',
+                'Gotze',
+            ],
+        ],
+        score: '4:0',
+        scored: ['Lewandowski', 'Gnarby', 'Lewandowski',
+            'Hummels'],
+        date: 'Nov 9th, 2037',
+        odds: {
+            team1: 1.33,
+            x: 3.25,
+            team2: 6.5,
+        },
+        printGoal: function(...arr){
+            this.scored = arr;
+            console.log(`${arr[0].length} was scored, ${this.scored} scored`);
+        }
+    };
+
+    //1
+    // const { players } = game;
+    // const players1 = players[0];
+    // const players2 = players[1];
+    
+    // console.log(players1);
+    // console.log(players2);
+
+    const [players1,players2] = game.players;
+    console.log(players1,players2)
+
+    //2
+    const [team1Gk , ...team1FieldPlayers]  = players1;
+    const [team2Gk , ...team2FieldPlayers]  = players2;
+
+    console.log(team1Gk,team1FieldPlayers);
+    console.log(team2Gk,team2FieldPlayers);
+
+    //3
+    const allPlayers = [...players1,...players2]
+    console.log(allPlayers);
+
+    //4
+    const players1Final = ['Thiago', 'Coutinho' , 'Perisic', ...players1];
+    console.log(players1Final);
+
+    //5
+    // const team1 = game.odds.team1;
+    // const team2 = game.odds.team2;
+    // const draw = game.odds.x;
+
+    const { odds:{team1,x:draw,team2} } = game;
+
+    console.log(team1,team2,draw);
+
+    //6
+    console.log(game.scored)
+    game.printGoal(game.scored)
+    game.printGoal(['Davies', 'Muller', 'Lewandowski' , 'Kimmich'])
+    game.printGoal(['Muller', 'Lewandowski'])
+
+    //7
+    // const whichWin = team1 ?? team2;
+    // console.log(whichWin)
+
+    team1 < team2 && console.log('team1 is more likely to win');
+    team1 > team2 || console.log('team1 is more likely to win');
+
+    </script>
+</body>
+</html>
