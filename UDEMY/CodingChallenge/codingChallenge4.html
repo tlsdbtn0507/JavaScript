@@ -54,6 +54,7 @@
         }
     };
 
+    //code Challenge 1
     //1
     // const { players } = game;
     // const players1 = players[0];
@@ -90,10 +91,10 @@
     console.log(team1,team2,draw);
 
     //6
-    console.log(game.scored)
-    game.printGoal(game.scored)
-    game.printGoal(['Davies', 'Muller', 'Lewandowski' , 'Kimmich'])
-    game.printGoal(['Muller', 'Lewandowski'])
+    // console.log(game.scored)
+    // game.printGoal(game.scored)
+    // game.printGoal(['Davies', 'Muller', 'Lewandowski' , 'Kimmich'])
+    // game.printGoal(['Muller', 'Lewandowski'])
 
     //7
     // const whichWin = team1 ?? team2;
@@ -101,6 +102,83 @@
 
     team1 < team2 && console.log('team1 is more likely to win');
     team1 > team2 || console.log('team1 is more likely to win');
+
+    for(const item of allPlayers) console.log(item);
+
+    console.log('--------------------------------------')
+
+
+    //code Challenge2
+    //1
+    // for(const [i,el] of game.scored.entries()){
+    //     console.log(`Goal ${i+1} : ${el}`)
+    // }
+
+    // //2
+    // const values = Object.values(game.odds);
+    // let sum = 0;
+    // for(let i=0 ; i<values.length; i ++){
+    //     sum += values[i];
+    // }
+    // console.log(sum/values.length)
+
+    //3
+    // const entries = Object.entries(game.odds);
+    // const teamName = Object.values(game);
+    // // console.log(teamName)
+    // // console.log(entries)
+    // for(const [ el , odd ]of entries){
+    //     // console.log(entries)
+    //    if(el !== 'x'){
+    //        console.log(`Odd of victory 
+    //        ${el === teamName[0] ? teamName[0] :  teamName[1]} :${odd}`)
+    //     //    console.log(`Odd of victory ${teamName[1]} :${odd}`)
+    //    }
+    //    else console.log(`Odd of draw : ${odd}`)
+    // }
+
+    // for(const [team , odd] of entries){
+    //     const teamStr = team === 'x' ? `draw` : `victory ${game[team]}`
+    //     console.log(`Odd of ${teamStr} : ${odd}`)
+    // }
+
+    //code Challenge 3
+    const gameEvents = new Map([
+        [17, '⚽ GOAL'],
+        [36, '� Substitution'],
+        [47, '⚽ GOAL'],
+        [61, '� Substitution'],
+        [64, '� Yellow card'],
+        [69, '� Red card'],
+        [70, '� Substitution'],
+        [72, '� Substitution'],
+        [76, '⚽ GOAL'],
+        [80, '⚽ GOAL'],
+        [92, '� Yellow card'],
+    ]);
+    //1
+    let noDupleEvents = new Set()
+    for(const [,events] of gameEvents){
+        noDupleEvents.add(events)
+    }
+    const result = [...noDupleEvents]
+    console.log(result)
+
+    // const events = [...new Set(gameEvents.values())];
+    // console.log(events)
+
+    //2
+    gameEvents.delete(64)
+    console.log(gameEvents)
+
+    //3
+    const fullTime = [...gameEvents.keys()].pop()
+    console.log(`An event happened, on average, every ${fullTime/gameEvents.size} minutes`)
+
+    //4
+    for(const [key, values] of gameEvents){
+        console.log(`${key < 45 ? '[FIRST HALF]' : '[SECOND HALF]'} ${key}:${values}`)
+    }
 
     </script>
 </body>

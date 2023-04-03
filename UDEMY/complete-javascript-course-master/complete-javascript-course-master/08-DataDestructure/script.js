@@ -10,7 +10,7 @@ const restaurant = {
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
   categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
-  mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+  mainMenu: ['Pizza', 'Pasta', 'Risotto','Pizza', 'Pasta', 'Risotto','ragu','kimchi'],
 
   openingHours: {
     mon: {
@@ -18,12 +18,12 @@ const restaurant = {
       close: 22,
     },
     tue: {
-      open: 12,
-      close: 22,
+      // open: 12,
+      // close: 22,
     },
     wed: {
-      open: 12,
-      close: 22,
+      // open: 12,
+      // close: 22,
     },
     thu: {
       open: 12,
@@ -42,9 +42,13 @@ const restaurant = {
       close: 24,
     },
   },
-  order: function(firstIndex, secondIndex){
+  //es6로 인해 :function을 생략해도됨
+  order(firstIndex, secondIndex){
     return [this.starterMenu(firstIndex),this.mainMenu(secondIndex)];
   },
+  // order: function(firstIndex, secondIndex){
+  //   return [this.starterMenu(firstIndex),this.mainMenu(secondIndex)];
+  // },
   whatOrdered: function (ind1,ind2,ind3,ind4){
     return `you have ordered ${ind1},${ind2},${ind3},and${ind4}`
   },
@@ -207,4 +211,134 @@ restaurant.orderPizza && restaurant.orderPizza('mushrooms','spinach');
 // ||과 비슷하게 ??가 있는데 차이점은 ||은 거짓값 전체를 체크하지만 
 // ??은 nullish(null or undefined)를 체크함
 // ??와 비슷 하게 
+
+// for of loop using entries
+const allOfMenus = [...restaurant.mainMenu, ...restaurant.starterMenu];
+
+for (const [i,el] of allOfMenus.entries()){
+  console.log(`${i+1} : ${el}`)
+}
+
+// optional chaining
+// optional chaining은 ?의 왼쪽 값의 존재유무 판별 후 실행
+// 배열, 객체, 메소드 사용 가능
+
+// optional chaining obj
+// console.log(restaurant.openingHours.mun.open) //err
+console.log(restaurant.openingHours.mun?.open) // optional chaining으로 undefined
+
+// 객체의 키 값을 찾아서 배열
+const days = Object.keys(restaurant.openingHours)
+
+for(const day of days){
+  const openingTime = restaurant.openingHours[day]?.open 
+  openingTime && console.log(`we open in ${day}day ${openingTime}`);
+  // openingTime || console.log(`we open 24hours in ${day}!`)
+  if(openingTime === 0) console.log(`we open 24hours in ${day}!`)
+  openingTime ?? console.log(`we don't open ${day}`);
+} 
+
+// 객체의 value 만 찾기
+const value = Object.values(restaurant.openingHours)
+console.log(value)
+
+// 객체의 entries
+const entries = Object.entries(restaurant.openingHours);
+console.log(...entries);
+
+// entries를 구조 분해도 가능
+for(const [key, {open,close}] of entries){
+  console.log(key, open, close)
+}
+
+// Set
+const strs = new Set('abcdefghijklmn');
+console.log(strs)
+console.log(typeof strs)
+
+const menuSet = new Set(restaurant.mainMenu)
+console.log(menuSet.size)// array와 다르게 겹치는 요소는 제거 함 size역시 length와 달리 중복 요소 감안
+console.log(menuSet.has('Pizza'))
+console.log(menuSet.has('bread')) // .has는 말그대로 요소의 유무 판별
+menuSet.add('Garlic Bread')
+menuSet.add('Garlic Bread') // add를 두번 해도 중복되므로 하나만
+menuSet.delete('Risotto')
+// menuSet.clear() delete all
+console.log(menuSet)
+
+//set은 배열 처럼 [0]을 넣어서 특정 값을 조회 할 수 없음
+//그래서 [...]로 배열을 만듦
+const menuArr = [...new Set(restaurant.mainMenu)];
+console.log(menuArr);
+console.log(new Set('shinyusu').size);
+
+//map
+
+const macBurgers = new Map();
+macBurgers.set(1,'Bicmac')
+macBurgers.set(2,'cheeseBurger')
+macBurgers.set(3,'chickenSandWich');
+macBurgers.set(true,"opened");
+macBurgers.set('burgers',['Bicmac','cheeseBurger','chickenSandWich'])
+macBurgers.set('location', 'gasan');
+// macBurgers.set([1,2,3],test)
+
+console.log(macBurgers.get('location'), macBurgers.get('burgers'))
+
+const index = 4
+const burgerCheck = macBurgers.get('burgers')
+// .has(macBurgers.get(index))
+
+console.log(new Set(burgerCheck).has(macBurgers.get(index)))
+// console.log(macBurgers.get([1,2,3])) // err 왜냐하면 위에 key로 지정된 배열[1,2,3]이 서로 다르기 때문
+//그를 해결 하기 위해선 [1,2,3]을 변수에 저장해야함
+
+macBurgers.set(document.querySelector('h1'),'h1');//객체에도 저장이 되기 때문에 dom에 접근이 가능함
+console.log(macBurgers)
+
+//map은 위에처럼 set으로 작성해도 되지만 아예 new Map(['1',123],['2',234])처럼 배열을 넣어서 할수 있고
+//아래 처럼 원래 있던 객체(혹은 배열)를 new Map으로 아래처럼 만들 수 있음
+const hoursMap = new Map(Object.entries(restaurant.openingHours))
+console.log(hoursMap)
+
+//simple Quiz
+const question = new Map([
+  ['question', 'What is the best programming language in the world?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'JavaScript'],
+  ['correct', 3],
+  [true, 'Correct 🎉'],
+  [false, 'Try again!'],
+]);
+
+console.log(question.get('question'))
+for(const [key,value] of question){
+  if(typeof key === 'number')console.log(`Answer${key} : ${value}`)
+}
+
+const answer = Number(prompt('Your Answer?'))
+
+if(answer !== 3){
+  console.log(question.get(false))
+} else console.log(question.get(true))
+
+// console.log(question.get(question.get('correct') === answer))
+
+//map => Array
+console.log([...question])
+
+//데이터 분류
+// if(데이터 needs only value as list) 데이터 = set or array
+//  if(데이터 needs to be manipulate or contain duplicate) 데이터 =  array
+//  if(데이터 needs unique value to work or to worl high perfomance such as search,delete etc 
+//  and need to delete duplicate) 데이터 = set
+// if (데이터 needs key and value) 데이터 = object or map
+//  object = easy to use such as (. or []) and traditional
+//  map = better performance and key of map can have any data type and easy to compute and
+//  iterate
+//  if(데이터 needs to include function and be worked with json) 데이터 = object
+//  if(데이터 simply need key and value or needs key is not string) 데이터 = map
+
+
 
