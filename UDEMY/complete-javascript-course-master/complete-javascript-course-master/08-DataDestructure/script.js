@@ -1,8 +1,6 @@
 'use strict';
 
 // Data needed for a later exercise
-const flights =
-  '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
 
 // Data needed for first part of the section
 const restaurant = {
@@ -137,7 +135,7 @@ const xArr = [1,2,3,4,5,6,7,8,9]
 add(...xArr);
 
 const gettingOrder = function(){
-  const temps = prompt('welcome to my restaurant. how can i help you?');
+  // const temps = prompt('welcome to my restaurant. how can i help you?');
   if(temps === null){
     alert('okay, bye');
     return
@@ -151,7 +149,7 @@ const gettingOrder = function(){
 const getStarterOrder = function(...menus){
   const check = confirm(`we have startmenus like ${menus}. which one would you like?`)
   if(check){
-    const orders = prompt('order1');
+    // const orders = prompt('order1');
     getMainOrder(orders,restaurant.mainMenu)
   } else{
     alert('okay bye')
@@ -161,7 +159,7 @@ const getStarterOrder = function(...menus){
 const getMainOrder = function(prevOrder, ...menus){
   const check = confirm(`okay, you have ordered ${prevOrder} as starter, how about main?`);
   if(check){
-    const order = [prompt(`we have ${menus} as main dish, what would you like?`)];
+    // const order = [prompt(`we have ${menus} as main dish, what would you like?`)];
     lastCheck(order,prevOrder)
   }
 }
@@ -317,7 +315,8 @@ for(const [key,value] of question){
   if(typeof key === 'number')console.log(`Answer${key} : ${value}`)
 }
 
-const answer = Number(prompt('Your Answer?'))
+// const answer = Number(prompt('Your Answer?'))
+const answer = 3
 
 if(answer !== 3){
   console.log(question.get(false))
@@ -340,5 +339,72 @@ console.log([...question])
 //  if(데이터 needs to include function and be worked with json) 데이터 = object
 //  if(데이터 simply need key and value or needs key is not string) 데이터 = map
 
+//String
+const maker = 'porsche'
+const productName = 'panamera'
+
+console.log(maker.indexOf('r')); // parameter가 있는 위치 같은 글자의 마지막은 lastindexof
+                                 // parameter로 단어 전체를 줄 수 있는데 대소문자를 따짐
+console.log(maker.slice(2)); //2 다음부터 글자들 출력 2 전까지 글자들 삭제 기존의 maker단어는 변함 x 
+console.log(maker.slice(2,4)); // 2개의 parameter가 오면 그 두 parameter사이의 글자만 (substr) 출력
+console.log(maker.slice(-1)); // e가 나옴으로 음수를 하면 음수의 숫자 만큼 뒤에서 숫자를 추출
+
+// const fullName = [prompt('firstName?'),prompt('lastName?')];
+
+// const [firstName,lastName] = fullName;
 
 
+// const makeFirstUpper = function(str){
+//   const originalStr = str.toLocaleLowerCase();
+//   const first = str.slice(0,1)
+//   const result = first.toUpperCase() + originalStr.slice(1)
+//   return result
+// }
+// console.log(makeFirstUpper(firstName),makeFirstUpper(lastName));
+
+const announcement = 'All passangers come to boarding door 23. Repeat door 23'
+console.log(announcement.replace(/door/g, 'gate'));
+// console.log(announcement);
+//replace를 그냥 'door'라고만 쓰면 Repeat 뒤에 door를 바꾸지 못함 그래서 정규표현식을 사용
+
+const phoneNum = ['010','1234','1234'].join('-');
+console.log(phoneNum);
+//join에 ' '이나 -을 쓰면 split의 반대처럼 해당 문자열들을 하나로 묶어줌
+
+const makeCreditNum = function(nums){
+  const str = nums+'';
+  const last = str.slice(-4);
+  return last.padStart(str.length,'*')
+}
+console.log(makeCreditNum(12341234));
+console.log(makeCreditNum(1241234125123));
+console.log(makeCreditNum('123124232353121'));
+
+const flights =
+  `_Delayed_Departure;fao93766109;txl2133758440;11:25
+  +_Arrival;bru0943384722;fao93766109;11:45
+  +_Delayed_Arrival;hel7439299980;fao93766109;12:05
+  +_Departure;fao93766109;lis2323639855;12:30`;
+
+const flightsArr = flights.split('+');
+// console.log(flightsArr)
+for(const arr of flightsArr){
+  const before = arr.replace('\n','');
+  // const status = before.split(';')[0].replace(/_/g, ' ')
+  // const aboard = before.split(';')[1].slice(0,3).toUpperCase()
+  // const destination = before.split(';')[2].slice(0,3).toUpperCase() 
+  // const time = before.split(';')[3].replace(":","h").trim()
+
+  let [ status ,aboard, destination, time] = before.split(';')
+
+  status = status.replace(/_/g,' ');
+  aboard = aboard.slice(0,3).toUpperCase();
+  destination = destination.slice(0,3).toUpperCase();
+  time = time.replace(":","h").trim();
+
+  const result = 
+  `${status.startsWith(' Delayed') ? 
+  '🔴' : ''}${status} from ${aboard} to ${destination} (${time})`
+  console.log(result.padStart(44))
+}
+console.log('avv'.padStart(10))

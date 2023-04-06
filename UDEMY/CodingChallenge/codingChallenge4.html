@@ -180,6 +180,31 @@
         console.log(`${key < 45 ? '[FIRST HALF]' : '[SECOND HALF]'} ${key}:${values}`)
     }
 
+    document.body.append(document.createElement('textarea'))
+    document.body.append(document.createElement('button'))
+
+    const button = document.querySelector('button');
+    
+    button.addEventListener('click',function(){
+        const textarea = document.querySelector('textarea').value
+        const atFirst = textarea.split('\n');
+
+        for (const word of atFirst){
+
+            const checks = atFirst.indexOf(word) +1;
+
+            const before = word.trim();
+            const [ one , two ] = before.split('_');
+
+            let first = two.slice(0,1).toUpperCase();
+            let twoResult = first + two.slice(1).toLowerCase();
+            const result = one.toLowerCase() + twoResult;
+
+            console.log(`${result.replace(' ','').padEnd(20)}${'✅'.repeat(checks).trim()}`);
+            // console.log(before.replace('_',''))
+        }
+    })
+
     </script>
 </body>
 </html>
