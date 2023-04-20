@@ -154,6 +154,24 @@ const makeIds = (arr)=>{
 }
 makeIds(accounts);
 
+const organizeMovements = (arr) => {
+    arr.forEach(e=>{
+        const length = e.movements.length;
+        const moves = e.movements;
+        e.movements = [];
+    
+        for(let i = 0; i < length; i++){
+            e.movements.push({
+                date:'',
+                movements:moves[i]
+            })
+        };
+
+    })
+};
+organizeMovements(accounts)
+
+//click login
 btnLogin.addEventListener('click',function(event){
     const userName = inputLoginUsername.value;
     const userPd = inputLoginPin.value;
@@ -188,10 +206,9 @@ const greeting = (time)=>{
     return greeting
 };
 
+//after login
 const loginDone = (obj)=>{
-    const [whosId] = accounts.filter(e=>{
-        return Number(obj.pw) === e.pin;
-    }) 
+    const whosId = accounts.find(e=> Number(obj.pw) === e.pin) 
     currentAccount[0] = whosId;
     currentAccount[0].id = obj.id;
 
@@ -200,21 +217,10 @@ const loginDone = (obj)=>{
     labelWelcome.innerHTML = `${greeting(time)}, ${currentAccount[0].owner.split(" ")[0]}!`;
     containerApp.style.opacity = 1;
 
-    showingCurBal(currentAccount[0]);
-    showingInOut(currentAccount[0].movements);
-
-    const length = currentAccount[0].movements.length;
-    const moves = currentAccount[0].movements;
-    currentAccount[0].movements = [];
-
-    for(let i = 0; i < length; i++){
-        currentAccount[0].movements.push({
-            date:'',
-            movements:moves[i]
-        })
-    };
 
     moveList(currentAccount[0].movements);
+    showingCurBal(currentAccount[0]);
+    showingInOut(currentAccount[0].movements);
 
     timer();
 };
@@ -225,9 +231,11 @@ const showingCurBal = (account) => {
     const month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
 
+    const moves = account.movements.map(e=> e.movements);
+
     labelDate.innerHTML =
     `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`;
-    totalAmount.innerHTML = `${showingTotalBalance(addAll(account.movements))}`
+    totalAmount.innerHTML = `${showingTotalBalance(addAll(moves))}`
 };
 
 //showing in and out
@@ -235,13 +243,18 @@ const showingInOut = (arr) => {
     const income = [];
     const withdraw = [];
 
-    arr.forEach(e=>{
+    const moves = arr.map(e=> e.movements);
+
+    moves.forEach(e=>{
         if(e>0) income.push(e)
         else withdraw.push(e)
     })
 
+    const interests = income.map(dep=>(dep*1.2)/100).filter(e=>e>=1).reduce((a,b)=> a+b,0);
+
     labelSumIn.innerHTML = `${showingTotalBalance(addAll(income))}`;
     labelSumOut.innerHTML = `${showingTotalBalance(addAll(withdraw))}`;
+    labelSumInterest.textContent = `${interests}$`
 };
 
 //showing movements lists
@@ -275,26 +288,30 @@ const sending = (e)=>{
     
     const [toWho] = filterFunc(to);
     
-    console.log(addAll(moneys(currentAccount[0].movements)))
-
     const currentAccountBalance = addAll(moneys(currentAccount[0].movements));
 
-    console.log(currentAccount[0].movements)
-    
     if(exceptionSend(money,currentAccountBalance,toWho)){
         const change = currentAccountBalance + money*-1
         totalAmount.innerHTML = `${showingTotalBalance(change)}`
         
+        const receiver = accounts.find(e => e.pin === toWho.pw)
+        receiver.movements.push({
+            date:`${getToday()}`,
+            movements:money
+        })
+
         currentAccount[0].movements.push({
             date:`${getToday()}`,
             movements:-1*money
         });
 
         moveList(currentAccount[0].movements);
+        console.log(receiver)
     } 
 
     inputTransferTo.value = null;
     inputTransferAmount.value = null;
+
 
     e.preventDefault();
 }
@@ -442,31 +459,64 @@ btnSort.addEventListener('click', sortFunc);
 //reverse도 원래 배열을 mutate함
 //es2022 at : 배열에 원하는 위치의 요소를 가져옴 마지막 가져올때 (-1)로 쉽게 가져올 수 잇고 str도 사용가능
 
+//map 함수(배열 메서드)
+//forEach와 다르게 map함수는 모든 요소에 원하는 작업을 하는 건 같지만 map은 새로운 배열을 만든다는 것이 차이
+
 //coding Challenge
 const data1 = {
     kate:[4, 1, 15, 8, 3],
     julia:[3, 5, 2, 12, 7]
-}
+};
 
 const data2 = {
     kate:[10, 5, 6, 1, 4],
     julia:[9, 16, 6, 8, 3]
-}
+};
 
 //1
-const juliasCorrectData = [...data1.julia].splice(1,3)
+const juliasCorrectData = [...data1.julia].splice(1,3);
 
 //2
-const totalData = [...juliasCorrectData,...data1.kate]
-console.log(totalData)
+const totalData = [...juliasCorrectData,...data1.kate];
+console.log(totalData);
 
 //3
 const checkDogs = (arr) => {
     arr.forEach((i,e)=>{
         console.log(`Dog number ${e+1} is  ${i > 3 ? `an adult and it's ${i}years old`:
-        `is still a puppy, and it's ${i}years old`}`)
+        `is still a puppy, and it's ${i}years old`}`);
     })
 }   
-checkDogs(totalData)
-console.log('------------------')
-checkDogs([...data2.julia,...data2.kate])
+checkDogs(totalData);
+console.log('------------------');
+checkDogs([...data2.julia,...data2.kate]);
+
+//challenge2
+const Data1 =[5,2,4,1,15,8,3]; 
+const Data2 =[16,6,10,5,6,1,4];
+
+const calcAverageHumanAge = (arr) => {
+    const beforeFilter =  arr.map(e=>e > 2 ? 16+e*4 : e*2).filter(e => e>=18 );
+    // const result = beforeFilter.reduce((a,b,i,arr)=> a+b/arr.length,0);
+    const result = beforeFilter.reduce((a,b)=> a+b,0)/beforeFilter.length;
+    return result;
+}
+console.log(calcAverageHumanAge(Data1));
+console.log(calcAverageHumanAge(Data2));
+
+//challenge3
+const data3 = [5,2,4,1,15,8,3];
+const data4 = [16,6,10,5,6,1,4];
+
+const calcAverageHumanAge2 = (arr)=> {
+    const result = arr.map(e=> e > 2 ? 16+e*4 : e*2)
+    .filter(e => e >=18)
+    .reduce((a,b,i,arr)=> a+b/arr.length,0);
+    return result
+}
+
+console.log(calcAverageHumanAge2(data3));
+console.log(calcAverageHumanAge2(data4));
+
+//.find
+//filter처럼 콜백 함수를 받고 말 그대로 find 기능을 하지만 filter와 다른건 검색 조건이 같은 하나의 요소만 반환
