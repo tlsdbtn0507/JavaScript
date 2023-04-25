@@ -76,6 +76,8 @@ const totalAmount = labelBalance;
 
 let sorting = true;
 
+let timeF;
+
 const showingTotalBalance = (num) => {
     return num.toLocaleString('en-US') + '$';
 };
@@ -86,7 +88,7 @@ const getToday = () => {
     const month = date.getMonth()+1;
     const day = date.getDate();
 
-    return `${year}/${month}/${day}`
+    return `${year}/${month < 10 ? '0' + month : month}/${day< 10 ? '0' + day : day}`
 }
 
 const getDate = (date) => {
@@ -185,8 +187,7 @@ btnLogin.addEventListener('click',function(event){
         loginDone(result);
     }
 
-    inputLoginUsername.value = null;
-    inputLoginPin.value = null;
+    inputLoginUsername.value = inputLoginPin.value = null;
     event.preventDefault();
 })
 
@@ -217,12 +218,10 @@ const loginDone = (obj)=>{
     labelWelcome.innerHTML = `${greeting(time)}, ${currentAccount[0].owner.split(" ")[0]}!`;
     containerApp.style.opacity = 1;
 
+    updateUI(currentAccount[0]);
 
-    moveList(currentAccount[0].movements);
-    showingCurBal(currentAccount[0]);
-    showingInOut(currentAccount[0].movements);
-
-    timer();
+    if(timeF) clearInterval(timeF);
+    timeF = timer();
 };
 
 //showing current Ballance
@@ -230,11 +229,26 @@ const showingCurBal = (account) => {
     const day = new Date().getDate();
     const month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
+    let hour = new Date().getHours();
+    let min = new Date().getMinutes(); 
+
+
+    // const time  = `${hour < 10 ? '0' + hour : hour} : ${min < 10 ? '0' + min : min}`;
+    setInterval(()=>{
+        min ++;
+        if(min >= 60){
+            hour ++;
+            min = 0
+        }
+        // console.log(min);
+        // console.log(hour);
+        // `${hour < 10 ? '0' + hour : hour}:${min < 10 ? '0' + min : min}`
+    },1000)
 
     const moves = account.movements.map(e=> e.movements);
 
     labelDate.innerHTML =
-    `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`;
+    `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year} ${hour} : ${min}`;
     totalAmount.innerHTML = `${showingTotalBalance(addAll(moves))}`
 };
 
@@ -262,8 +276,6 @@ const moveList = (arr) => {
     containerMovements.innerHTML = '';
 
     arr.forEach((mov,i)=>{
-
-
         const type = mov.movements > 0 ? 'deposit' : 'withdrawal';
 
         const date = getDate(mov.date);
@@ -279,6 +291,12 @@ const moveList = (arr) => {
         containerMovements.insertAdjacentHTML('afterbegin',html)
     });
 };
+
+const updateUI = (acc) => {
+    moveList(acc.movements);
+    showingCurBal(acc);
+    showingInOut(acc.movements);
+}
 
 
 //transfer section
@@ -297,21 +315,21 @@ const sending = (e)=>{
         const receiver = accounts.find(e => e.pin === toWho.pw)
         receiver.movements.push({
             date:`${getToday()}`,
-            movements:money
+            movements:Number(money)
         })
 
         currentAccount[0].movements.push({
             date:`${getToday()}`,
-            movements:-1*money
+            movements:Number(-1*money)
         });
 
-        moveList(currentAccount[0].movements);
-        console.log(receiver)
+        updateUI(currentAccount[0]);
     } 
 
-    inputTransferTo.value = null;
-    inputTransferAmount.value = null;
+    inputTransferTo.value = inputTransferAmount.value = null;
 
+    clearInterval(timeF);
+    timeF = timer();
 
     e.preventDefault();
 }
@@ -326,7 +344,10 @@ const exceptionSend = (money,total,who)=>{
     } else if(who.pw === currentAccount[0].pin){
         alert("you can't send your own money to yourself");
         return false
-    } 
+    } else if(money <= 0){
+        alert("Inavailable number");
+        return false
+    }
     else return true
 }
 btnTransfer.addEventListener('click',sending)
@@ -335,14 +356,22 @@ btnTransfer.addEventListener('click',sending)
 const takeLoan = (e) => {
     const loan = Number(inputLoanAmount.value);
 
-    currentAccount[0].movements.push({
-        date:`${getToday()}`,
-        movements:loan
-    });
+    if(!loan || loan <0){
+        alert("Inavailable number");
+        inputLoanAmount.value = null;
+    } else {
+        currentAccount[0].movements.push({
+            date:`${getToday()}`,
+            movements:loan
+        });
+    
+        updateUI(currentAccount[0]);
+        totalAmount.innerHTML = `${showingTotalBalance(addAll(moneys(currentAccount[0].movements)))}`
+        inputLoanAmount.value = null;
+    };
 
-    moveList(currentAccount[0].movements);
-    totalAmount.innerHTML = `${showingTotalBalance(addAll(moneys(currentAccount[0].movements)))}`
-    inputLoanAmount.value = null;
+    clearInterval(timeF);
+    timeF = timer();
     e.preventDefault();
 };
 
@@ -366,11 +395,11 @@ const closing = (e) => {
             deleteAccountFunction(closeId,closePw);
             labelWelcome.innerHTML = 'Log in to get started';
             containerApp.style.opacity = 0;
+            clearInterval(timeF);
         }
     }
     
-    inputCloseUsername.value = null;
-    inputClosePin.value = null;
+    inputCloseUsername.value = inputClosePin.value = null;
     e.preventDefault();
 };
 
@@ -378,12 +407,8 @@ btnClose.addEventListener('click',closing);
 
 //delete from account, ids array
 const deleteAccountFunction = (id,pw) => {
-    const deleteAccount = accounts.findIndex(e=>{
-        return e.pin === Number(pw)
-    });
-    const deleteId = ids.findIndex(e=>{
-        return e.id === id;
-    })
+    const deleteAccount = accounts.findIndex(e=> e.pin === Number(pw));
+    const deleteId = ids.findIndex(e=> e.id === id)
     for(let i = 0; i < accounts.length; i++){
         if(i === deleteAccount){
             accounts.splice(i,1)
@@ -398,7 +423,8 @@ const deleteAccountFunction = (id,pw) => {
 
 //timer
 const timer = () => {
-    let limit = 300;
+    
+    let limit = 599;
     let min = 0;
     let sec = 0;
 
@@ -406,16 +432,18 @@ const timer = () => {
         min = parseInt(limit/60);
         sec = limit%60;
 
-        labelTimer.innerHTML = `0${min}:${sec < 10 ? '0'+sec : sec}`;
-        limit--;
-
-        if(limit<0){
+        labelTimer.innerHTML = `${min < 10 ? '0' + min : min}:${sec < 10 ? '0'+sec : sec}`;
+        
+        if(limit === 0){
             clearInterval(x);
             labelWelcome.innerHTML = 'Log in to get started';
             containerApp.style.opacity = 0;
             currentAccount[0] = null;
         }
-    },1000)
+        limit--;
+    },1000);
+
+    return x
 };
 
 //sorting arr by deposit or withdraw
@@ -427,12 +455,7 @@ const sortFunc = () => {
     if(sorting){
         moveList(arr)
     } else {
-        const copying = [...arr] 
-        copying.sort((a,b)=>{
-            if(a.movements > b.movements) return 1;
-            else if(a.movements < b.movements) return -1;
-            else return 0
-        })
+        const copying = [...arr].sort((a,b)=> a.movements - b.movements);
         moveList(copying)
     }
 }
@@ -520,3 +543,112 @@ console.log(calcAverageHumanAge2(data4));
 
 //.find
 //filter처럼 콜백 함수를 받고 말 그대로 find 기능을 하지만 filter와 다른건 검색 조건이 같은 하나의 요소만 반환
+
+//.findIndex
+//find를 하는데 찾은 객체를 반환하는게 아니라 해당 객체가 배열의 몇번째 index에 있는지를 반환
+// 비슷한 메소드로 indexOf가 있는데 이건 indexOf(num)에 num이 있는지를 판단
+
+//some
+//include와 비슷 하지만 다른 점은 some매서드가 콜백 함수를 인자로 받아서 특정 조건이 참(참인 경우의 수에 관계 없이)
+//이면 true 반환
+
+//flat
+//배열 안에 중첩된 배열이 있을 때 flat메소드를 호출하면 하나의 배열로 합쳐짐 대신 중첩을 하나만 풀 수 있음 더 중첩된
+//배열을 풀고 싶으면 메소드에 ()원하는 중첩수를 넣으면 됨
+//추가로 map기능을 합친 거로 flatMap이 있음
+
+//sort
+const arr = account1.movements;
+
+const sortArr = [...arr].sort((a,b)=> a.movements-b.movements); //오름차순
+const sortArrBack = [...arr].sort((a,b) => b.movements - a.movements); //내림차순
+console.log(sortArr);
+console.log(sortArrBack);
+
+//new Array & fill()
+const newArr = new Array(7);
+newArr.fill({a:1,b:2},0);
+console.log(newArr);
+
+//array.from
+const arrFrom = Array.from({length:7},()=>1);
+//from()의 두번째 인자는 map함수가 들어감
+console.log(arrFrom)
+
+const arr7 = [1,2,3,4,5,6,7];
+const arr7from = Array.from({length:7}, (_,i) => i+1);
+console.log(arr7 , arr7from);
+
+document.querySelector('.logo').addEventListener('click',()=>{
+    const getArrFromDom = Array.from(document.querySelectorAll('.movements__value'),el=>Number(el.innerHTML.replace('$','')));
+    console.log(getArrFromDom);
+})
+
+//reduce 활용
+
+//1.숫자세기(콜백함수활용)
+const reducing = arr7.reduce((count,e)=> e > 3 ? count+1 : count,0);
+// const reducing = arr7.reduce((count,e)=> e > 3 ? ++count : count,0);
+console.log(reducing);
+
+//2. 객체로 요약가능
+const sums = accounts.flatMap(e => e.movements).reduce((sums,e) => { 
+    // e.movements > 0 ? sums.dep += e.movements : sums.wid += e.movements;
+    sums[e.movements > 0 ? 'dep' : 'wid'] += e.movements
+    return sums
+},{ dep:0, wid:0 });
+
+console.log(sums)
+
+//3. 문자열 필터링
+const converTitleCap = (title) => {
+    const execption = ['a','not', 'but', 'an', 'and', 'or', 'in', 'also','with'];
+    const titleCap = title.toLowerCase().split(' ')
+    .map(e=> execption.includes(e) ? e : e[0].toUpperCase()+e.slice(1))
+    .reduce((e,i) => e+' '+i, '')
+    return titleCap
+};
+console.log(converTitleCap('this is a nice title'));
+console.log(converTitleCap('this is not a nice title'));
+console.log(converTitleCap('and this is also a nice title BUT long'));
+console.log(converTitleCap('inaddition this is another with LONG title EXAMPLE'));
+
+
+//coding Challenge4
+const dogs = [
+    { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+    { weight: 8, curFood: 200, owners: ['Matilda'] },
+    { weight: 13, curFood: 275, owners: ['Sarah', 'John'] }, 
+    { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+dogs.forEach(e=>e.recomFood = Math.trunc(e.weight** 0.75 * 28));
+
+const sarah = dogs.find(e=>e.owners.includes('Sarah'))
+console.log(sarah.weight > sarah.recomFood ? 'too much' : 'too less');
+console.log('---------quiz1-----------');
+
+const { ownersEatTooMuch , ownersEatTooLittle } = dogs.reduce((cur, e)=>{
+    e.curFood > e.recomFood ? 
+    cur.ownersEatTooMuch.push(...e.owners) :
+    cur.ownersEatTooLittle.push(...e.owners);
+    return cur;
+},{ ownersEatTooMuch:[] , ownersEatTooLittle:[] });
+console.log(ownersEatTooMuch , ownersEatTooLittle);
+console.log('---------quiz2-----------');
+
+
+console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much!`);
+console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little!`);
+console.log('---------quiz3-----------');
+
+console.log(dogs.some(e=> e.recomFood === e.curFood));
+console.log('---------quiz4-----------');
+
+const okay = dogs.filter(e=> e.curFood > e.recomFood*0.9 && e.curFood < e.recomFood*1.1);
+console.log(okay);
+console.log('---------quiz5-----------');
+
+const sort = [...dogs].sort((a,b)=> a.recomFood - b.recomFood)
+console.log(sort)
+console.log(dogs)
