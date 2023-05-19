@@ -130,11 +130,6 @@ navigator.geolocation.getCurrentPosition(function(pos){
                     return;
                 }
 
-                console.log(alerter(inputType.value,
-                    inputDistance.value,
-                    inputDuration.value,
-                    bool === !bool ? inputElevation.value : inputCadence.value))
-
                 workOutsArr.push(workout);
 
                 let alreadyWorkouts = JSON.parse(localStorage.getItem('workouts'));
@@ -180,6 +175,7 @@ containerWorkouts.addEventListener('click',function(e){
     if(check === 0){
         const ev = e.target.closest('.workout');
         if(!ev) return;
+
         const getId = ev.dataset.id;
         let toFindArr = JSON.parse(localStorage.getItem('workouts'));
 
