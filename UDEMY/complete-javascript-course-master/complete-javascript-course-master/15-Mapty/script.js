@@ -17,7 +17,7 @@ let bool = true;
 let map
 
 const workOutsArr = [];
-const AllWorkOuts = localStorage.getItem('workouts');
+let AllWorkOuts = localStorage.getItem('workouts');
 let index = !JSON.parse(AllWorkOuts) ? 0 :
  JSON.parse(AllWorkOuts).length;
 
@@ -86,7 +86,7 @@ navigator.geolocation.getCurrentPosition(function(pos){
 
     let workOutArrs = JSON.parse(AllWorkOuts);
 
-    if( workOutArrs !== null){
+    if(workOutArrs !== null){
         workOutArrs.forEach(e => {
             const eWorkouts = 
             new workouts(e.lat,e.lng,e.marker,e.index,e.type,e.dis,e.dur,e.other);
@@ -120,10 +120,25 @@ navigator.geolocation.getCurrentPosition(function(pos){
                     inputDuration.value,
                     bool === !bool ? inputElevation.value : inputCadence.value
                 )
+                
+                if(!alerter(inputType.value,
+                    inputDistance.value,
+                    inputDuration.value,
+                    bool === !bool ? inputElevation.value : inputCadence.value)
+                ) {
+                    alert('check your input')
+                    return;
+                }
+
+                console.log(alerter(inputType.value,
+                    inputDistance.value,
+                    inputDuration.value,
+                    bool === !bool ? inputElevation.value : inputCadence.value))
 
                 workOutsArr.push(workout);
 
-                let alreadyWorkouts = JSON.parse(localStorage.getItem('workouts'))
+                let alreadyWorkouts = JSON.parse(localStorage.getItem('workouts'));
+
                 if(alreadyWorkouts === null) {
                     localStorage.setItem(`workouts`, JSON.stringify(workOutsArr));
                 } else {
@@ -131,7 +146,7 @@ navigator.geolocation.getCurrentPosition(function(pos){
                     JSON.stringify(alreadyWorkouts.concat(workOutsArr)));
                 }
 
-                workout.stampMarker()
+                workout.stampMarker();
 
                 coord.marker = true;
 
@@ -161,15 +176,18 @@ const objMaker = (a,b,c,d,e)=> {
 
 containerWorkouts.addEventListener('click',function(e){
     const check =  e.target.classList.value.indexOf('workout')
+
     if(check === 0){
-        const getId = e.target.closest('.workout').dataset.id;
-        const toFindArr = JSON.parse(AllWorkOuts);
+        const ev = e.target.closest('.workout');
+        if(!ev) return;
+        const getId = ev.dataset.id;
+        let toFindArr = JSON.parse(localStorage.getItem('workouts'));
 
         const result = toFindArr.find(e=> e.index === +getId);
         const {lat,lng} = result;
 
-        map.setView([lat,lng],15)
-    }
+        map.setView([lat,lng],15);
+    } 
 })
 
 inputType.addEventListener('change',function(e){
@@ -200,7 +218,7 @@ return    `<li class="workout workout--${obj.type}" data-id="${index}">
 </div>
 <div class="workout__details">
   <span class="workout__icon">⚡️</span>
-  <span class="workout__value">${Math.trunc(obj.dis/obj.dur)}</span>
+  <span class="workout__value">${(obj.dis/obj.dur).toFixed(1)}</span>
   <span class="workout__unit">${obj.type === 'running' ? 'km/min' : 'km/h'}</span>
 </div>
 <div class="workout__details">
@@ -209,4 +227,14 @@ return    `<li class="workout workout--${obj.type}" data-id="${index}">
   <span class="workout__unit">${obj.type === 'running' ? 'spm' : 'm'}</span>
 </div>
 </li>`
+}
+
+const alerter = function(a,b,c,d){
+    const arr = [a,b,c,d];
+    let result
+    arr.forEach(e => {
+        if(!e || Number(e) < 0) return result = false 
+        if( +e === Number(e) && Number(e) > 0) result = true
+    });
+    return result
 }
