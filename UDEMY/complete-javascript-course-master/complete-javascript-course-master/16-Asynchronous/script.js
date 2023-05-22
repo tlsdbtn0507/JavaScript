@@ -6,24 +6,22 @@ const countriesContainer = document.querySelector('.countries');
 const renderCountry = function (data, className = '') {
   const html = `
      <article class="country ${className}">
-            <img class="country__img" src="${data.flag}" />
+            <img class="country__img" src="${data.flags.png}" />
             <div class="country__data">
-            <h3 class="country__name">${data.name}</h3>
+            <h3 class="country__name">${data.name.common}</h3>
             <h4 class="country__region">${data.region}</h4>
             <p class="country__row"><span>👫</span>${(
               +data.population / 1000000
             ).toFixed(1)}m</p>
-            <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-            <p class="country__row"><span>💰</span>${
-              data.currencies[0].name
-            }</p>;
+            <p class="country__row"><span>🗣️</span>${data.languages.value}</p>
+            <p class="country__row"><span>💰</span>${ data.currencies}</p>;
             </div>
           </article>
           `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
 };
 
-const renderError = function (msg) {
+const renderError = function (msg = "") {
   countriesContainer.insertAdjacentText('beforeend', msg);
 };
 
@@ -184,49 +182,205 @@ const renderError = function (msg) {
 //9. finally 함수는 then이나 catch처럼 프로미스가 fulfilled이나 rejected되
 //던 간에 무조건 실행하는 함수로 꼭 써야하는 건 아님 보통 로딩 중을 띄울때 씀
 
-// const getCountryData = function (country) {
-//   //1.
-//   fetch(`https://restcountries.com/v2/name/${country}`)
-//     //2.
-//     .then(response => response.json() /*6.err => alert(err)*/)
-//     .then(data => {
-//       renderCountry(data[0]);
-//       //3.
-//       let neighNum = Math.floor(Math.random() * data[0].borders.length);
-//       const neighbour = data[0].borders[neighNum];
+const getCountryData = function (country) {
+  //1.
+  fetch(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
+    //2.
+    .then(response => response.json() /*6.err => alert(err)*/)
+    .then(data => {
+      renderCountry(data[0]);
+      //3.
+      let neighNum = Math.floor(Math.random() * data[0].borders.length);
+      const neighbour = data[0].borders[neighNum];
 
-//       if (!neighbour) return;
-//       //4.
-//       return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
-//     })
-//     //5.
-//     .then(response => response.json() /*6.,err => alert(err)*/)
-//     .then(data => renderCountry(data, 'neighbour'))
-//     //7.
-//     .catch(err => {
-//       console.error(`${err}`);
-//       //8.
-//       renderError(`Error is occured by:${err.message}.Try again`);
-//     })
-//     //9.
-//     .finally(() => {
-//       countriesContainer.style.opacity = 1;
-//     });
-// };
+      if (!neighbour) return;
+      //4.
+      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+    })
+    //5.
+    .then(response => response.json() /*6.,err => alert(err)*/)
+    .then(data => renderCountry(data, 'neighbour'))
+    //7.
+    .catch(err => {
+      console.error(`${err}`,err);
+      //8.
+      renderError(`Error is occured by:${err.message}.Try again`,err);
+    })
+    //9.
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
 
 // btn.addEventListener('click', function () {
 //   // getCountryData('korea (Republic of)');
-//   getCountryData('france');
+//   // getCountryData('france');
 // });
 
 //Coding Challenge
 
-const whereAmI = function (lat, lng) {
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    });
+// const whereAmI = function (lat, lng) {
+
+//   getPosition().then(res=>{
+//     console.log(res)
+//   })
+
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then(response => response.json(),error => renderError(error))
+//     .then(data => {
+//       const {city, country} = data;
+//       console.log(`You are in ${city}, ${country}`);
+//       getCountryData(country)
+//     })
+// };
+
+// whereAmI(52.508, 13.381);
+// whereAmI(19.037, 72.873);
+// whereAmI(-33.933,18.474);
+
+//setTimeout promise중 promise함수가 microtest 큐 특성으로 setTimeout의 비동기(일반 콜백) 보다 먼저 실행됨
+
+//promise함수 생성
+// const lotteryPromise = new Promise(function(resolve,reject){
+//   setTimeout(() => {
+//     if(Math.random() >= 0.5)resolve('win')
+//     else reject(new Error('lose'))
+//   }, 3000);
+// })
+
+//res는 위에서 생성된 Promise의 resolve의 인수로 들어가 실행하고
+//err는 reject의 인수로서 실행
+// lotteryPromise.then(res=>console.log(res)).catch(err=>console.error(err));
+
+//promise chain
+const wait = function(sec){
+  return new Promise(function(res){
+    setTimeout(res, sec*1000);
+  })
+}
+
+// wait(2).then(()=>{
+//   console.log('2sec waited');
+//   return wait(1)//promise인 wait을 반환하므로 다음줄에 .then실행가능
+// }).then(()=>{
+//   console.log('1sec waited')
+// })
+
+const getPosition = function(){
+  return new Promise(function(res,rej){
+    navigator.geolocation.getCurrentPosition(res,rej)
+  })
+}
+
+// const whereAmI = function (lat, lng) {
+
+//   getPosition().then(res=>{
+//     const {latitude:lat , longitude:lng} = res.coords
+//     return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//   })
+//   .then(response => response.json(),error => renderError(error))
+//   .then(data => {
+//     const {city, country,prov} = data;
+//     console.log(data,country)
+//     console.log(`You are in ${city}, ${country}`);
+//     getCountryData(country)
+//   })
+// };
+
+// whereAmI()
+// const makeImg = function(srcStr){
+
+// }
+
+const createImage = function(path){
+  const image = document.createElement('img');
+  const divImgs = document.querySelector('.images');
+
+  image.src = `img/${path}`;
+
+  setTimeout(() => {
+    divImgs.appendChild(image);
+  }, 1000);
+
+  return new Promise(function(res,rej){
+    setTimeout(() => {
+      res(path);
+      image.style.display = 'none'
+    }, 2000);
+  })
 };
 
-whereAmI(52.508, 13.381);
+// createImage('img-1.jpg')
+// .then(()=>{
+//   createImage('img-2.jpg')
+//   .then(()=>{
+//     createImage('img-3.jpg')
+//   })
+// }).catch(e=>console.error(e))
+
+const whereAmI = async function(){
+
+  const a = await getPosition();
+  const {latitude:lat , longitude:lng} = a.coords;
+
+  const getting = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+
+  if(!getting.ok) throw new Error('Getting position went wrong');
+
+  const {country:b} = await getting.json();
+
+  const res = await fetch(`https://restcountries.com/v3.1/name/${b}?fullText=true`);
+
+  if(!res.ok) throw new Error('Getting Country went wrong');
+
+  const data = await res.json();
+  renderCountry(data[0]);
+  return data[0].name;
+};
+
+console.log('hi');
+
+(async function(){
+  const returned = await whereAmI();
+  console.log(returned)
+})();
+
+// whereAmI()
+
+const get3 = async function(c1,c2,c3){
+  try {
+    const arr = [c1,c2,c3];
+
+    const res =  await Promise.all([
+      await fetch(`https://restcountries.com/v3.1/name/${c1}`),
+      await fetch(`https://restcountries.com/v3.1/name/${c2}`),
+      await fetch(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+    //Promise.all은 하나라도 에러 발생시 전체 다 실행이 막힘
+
+    console.log(res);
+    
+  } catch (error) {
+    console.error(error)
+  }
+};
+
+get3('korea','japan','china');
+
+//Promise.race
+//=> 위에 Promise.all처럼 여러 비동기 작업을 호출하는데 그중 제일 빨리 온것만 리턴
+
+
+const timeOut = function(sec){
+  return new Promise(function(_,reject){
+    setTimeout(() => {
+      reject(new Error('Request took Too Long!'))
+    }, sec*1000);
+  })
+};
+
+Promise.race([
+  fetch(`https://restcountries.com/v3.1/name/${c1}`),
+  timeOut(1)
+])
+//=>fetch와 timeOut을 Promise.race시켜서 fetch가 1초이상 넘으면 실행 불가하게 함
